@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NGD Academy | Next Generation Developers</title>
+  <meta name="description" content="أكاديمية تعليمية طلابية تطوعية لبناء المهارات التقنية، القيادية، والعملية.">
+  
+  <!-- Font & Tailwind Config -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            navy: '#092342',
+            gold: '#B48F4C',
+            'gold-hover': '#9C7B3E',
+            ivory: '#F9F7F1',
+            muted: '#707A84',
+          },
+          fontFamily: {
+            sans: ['"IBM Plex Sans Arabic"', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body { background-color: #F9F7F1; color: #092342; }
+    .gold-border-subtle { border-color: rgba(180, 143, 76, 0.2); }
+  </style>
+</head>
+<body class="font-sans antialiased text-[#092342] bg-[#F9F7F1] flex flex-col min-h-screen">
+
+  <!-- ================= HEADER & NAVIGATION ================= -->
+  <header class="sticky top-0 z-50 bg-[#092342] text-white border-b border-white/10 transition-all">
+    <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
+      
+      <!-- Brand Logo / Name -->
+      <a href="index.html" class="flex items-center gap-3 group">
+        <div class="w-10 h-10 rounded bg-[#B48F4C] text-[#092342] flex items-center justify-center font-bold text-lg tracking-wider">
+          NGD
+        </div>
+        <div class="flex flex-col">
+          <span class="font-bold text-lg tracking-tight leading-tight">NGD ACADEMY</span>
+          <span class="text-xs text-[#707A84] tracking-wider uppercase font-medium">Next Generation Developers</span>
+        </div>
+      </a>
+
+      <!-- Desktop Nav -->
+      <nav class="hidden md:flex items-center gap-8 text-sm font-medium text-gray-300">
+        <a href="#about" class="hover:text-[#B48F4C] transition">عن الأكاديمية</a>
+        <a href="#programs" class="hover:text-[#B48F4C] transition">البرامج التدريبية</a>
+        <a href="#how-it-works" class="hover:text-[#B48F4C] transition">مسار التعلم</a>
+        <a href="#events" class="hover:text-[#B48F4C] transition">الفعاليات والمعسكرات</a>
+        <a href="#volunteer" class="hover:text-[#B48F4C] transition">التطوع</a>
+        <a href="events.html" class="hover:text-[#B48F4C] transition">الفعاليات</a>
+        <a href="contact.html" class="hover:text-[#B48F4C] transition">تواصل معنا</a>
+</nav>
+
+      <!-- CTA Button -->
+      <div class="hidden md:flex items-center gap-4">
+        <a href="#programs" class="px-5 py-2.5 rounded text-xs font-semibold uppercase tracking-wider bg-[#B48F4C] text-[#092342] hover:bg-[#9C7B3E] transition shadow-sm">
+          استكشف البرامج
+        </a>
+      </div>
+
+      <!-- Mobile Menu Button -->
+      <button id="mobile-toggle" class="md:hidden text-white focus:outline-none" aria-label="Open Menu">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path>
+        </svg>
+      </button>
+    </div>
+
+    <!-- Mobile Nav Dropdown -->
+    <div id="mobile-menu" class="hidden md:hidden px-6 pt-2 pb-6 bg-[#092342] border-t border-white/10 space-y-3 text-sm">
+      <a href="#about" class="block py-2 text-gray-300 hover:text-[#B48F4C]">عن الأكاديمية</a>
+      <a href="#programs" class="block py-2 text-gray-300 hover:text-[#B48F4C]">البرامج التدريبية</a>
+      <a href="#how-it-works" class="block py-2 text-gray-300 hover:text-[#B48F4C]">مسار التعلم</a>
+      <a href="#events" class="block py-2 text-gray-300 hover:text-[#B48F4C]">الفعاليات والمعسكرات</a>
+      <a href="#volunteer" class="block py-2 text-gray-300 hover:text-[#B48F4C]">التطوع</a>
+      <a href="events.html" class="block py-2 text-gray-300 hover:text-[#B48F4C]">الفعاليات</a>
+      <a href="contact.html" class="block py-2 text-gray-300 hover:text-[#B48F4C]">تواصل معنا</a>
+      <a href="#programs" class="block mt-4 text-center px-4 py-2.5 bg-[#B48F4C] text-[#092342] font-semibold rounded text-xs">استكشف البرامج</a>
+    </div>
+  </header>
+
+  <main class="flex-grow">
+    <section aria-label="أرقام الأكاديمية" class="bg-[#F9F7F1] border-b border-[#092342]/10">
+      <div class="max-w-7xl mx-auto px-6 py-8 grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
+        <div><strong class="block text-3xl font-bold text-[#B48F4C]">+30</strong><span class="text-xs text-[#707A84]">كورسًا وبرنامجًا</span></div>
+        <div><strong class="block text-3xl font-bold text-[#B48F4C]">+700</strong><span class="text-xs text-[#707A84]">ساعة تدريبية</span></div>
+        <div><strong class="block text-3xl font-bold text-[#B48F4C]">+3000</strong><span class="text-xs text-[#707A84]">مستفيد</span></div>
+        <div><strong class="block text-3xl font-bold text-[#B48F4C]">2023</strong><span class="text-xs text-[#707A84]">عام التأسيس</span></div>
+      </div>
+    </section>
+
+    <!-- ================= SECTION 1: HERO ================= -->
+    <section class="relative bg-[#092342] text-white py-24 md:py-32 overflow-hidden border-b border-white/10">
+      <div class="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+        
+        <div class="lg:col-span-7 space-y-6">
+          <div class="inline-flex items-center gap-2 px-3 py-1 rounded border border-[#B48F4C]/40 bg-[#B48F4C]/10 text-[#B48F4C] text-xs font-semibold tracking-widest uppercase">
+            LEARN • BUILD • LEAD
+          </div>
+          <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight tracking-tight">
+            خطوتك القادمة <br><span class="text-[#B48F4C]">تبدأ من هنا.</span>
+          </h1>
+          <p class="text-gray-300 text-lg md:text-xl font-light leading-relaxed max-w-xl">
+            مجتمع تعليمي طلابي متكامل يطور مهاراتك، يفتح أمامك آفاقاً جديدة، ويحول المعرفة النظرية إلى خبرة عملية حقيقية.
+          </p>
+          <div class="pt-4 flex flex-wrap gap-4">
+            <a href="#programs" class="px-7 py-3.5 bg-[#B48F4C] text-[#092342] font-semibold rounded text-sm hover:bg-[#9C7B3E] transition shadow-md">
+              استكشف البرامج التدريبية
+            </a>
+            <a href="#volunteer" class="px-7 py-3.5 border border-white/20 hover:border-[#B48F4C] text-white hover:text-[#B48F4C] font-medium rounded text-sm transition">
+              انضم لفريقنا التطوعي
+            </a>
+          </div>
+        </div>
+
+        <!-- Hero Editorial Image Placeholder -->
+        <div class="lg:col-span-5 relative">
+          <div class="relative rounded border border-white/15 bg-white/5 p-2 shadow-2xl">
+            <div class="aspect-[4/3] rounded bg-[#06172d] flex flex-col items-center justify-center p-6 text-center border border-white/10">
+              <svg class="w-12 h-12 text-[#707A84] mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+              </svg>
+              <span class="text-xs text-[#707A84] uppercase tracking-wider">التعلم • التطبيق • الأثر</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ================= SECTION 2: ABOUT NGD ================= -->
+    <section id="about" class="py-24 max-w-7xl mx-auto px-6">
+      <div class="max-w-2xl mb-16">
+        <span class="text-xs font-semibold uppercase tracking-widest text-[#B48F4C] block mb-2">عن الأكاديمية</span>
+        <h2 class="text-3xl md:text-4xl font-bold tracking-tight text-[#092342]">أكثر من مجرد مساحة للتعلم</h2>
+        <p class="mt-4 text-[#707A84] text-base leading-relaxed">
+          مبادرة تعليمية تطوعية يقودها نخبة من الطلاب والشغوفين، بهدف صقل الكفاءات وبناء بيئة تشاركية تلبي متطلبات العصر العملي والأكاديمي.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <!-- Mission -->
+        <div class="p-8 rounded bg-white border border-[#092342]/10 shadow-sm flex flex-col justify-between">
+          <div>
+            <div class="w-10 h-10 rounded bg-[#F9F7F1] text-[#092342] flex items-center justify-center font-bold text-sm mb-6 border border-[#B48F4C]/30">01</div>
+            <h3 class="text-xl font-bold mb-3 text-[#092342]">رسالتنا (Mission)</h3>
+            <p class="text-sm text-[#707A84] leading-relaxed">
+              تقديم تعليم وتدريب مجاني احترافي يجمع بين المهارات التقنية والإدارية والناعمة، ويساعد الشباب على بناء مسارات مهنية مستدامة.
+            </p>
+          </div>
+        </div>
+
+        <!-- Vision -->
+        <div class="p-8 rounded bg-white border border-[#092342]/10 shadow-sm flex flex-col justify-between">
+          <div>
+            <div class="w-10 h-10 rounded bg-[#F9F7F1] text-[#092342] flex items-center justify-center font-bold text-sm mb-6 border border-[#B48F4C]/30">02</div>
+            <h3 class="text-xl font-bold mb-3 text-[#092342]">رؤيتنا (Vision)</h3>
+            <p class="text-sm text-[#707A84] leading-relaxed">
+              الريادة في صناعة جيل عربي مبدع، متوازن نفسيًا، ومتمكن تقنيًا وإداريًا.
+            </p>
+          </div>
+        </div>
+
+        <!-- Community -->
+        <div class="p-8 rounded bg-white border border-[#092342]/10 shadow-sm flex flex-col justify-between">
+          <div>
+            <div class="w-10 h-10 rounded bg-[#F9F7F1] text-[#092342] flex items-center justify-center font-bold text-sm mb-6 border border-[#B48F4C]/30">03</div>
+            <h3 class="text-xl font-bold mb-3 text-[#092342]">مجتمعنا (Community)</h3>
+            <p class="text-sm text-[#707A84] leading-relaxed">
+              مجتمع من المتعلمين والمتطوعين يتشاركون المعرفة والخبرة، ويصنعون فرصًا للتعلم والعمل الجماعي.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= SECTION 3: EDUCATIONAL PROGRAMS ================= -->
+    <section id="programs" class="py-24 bg-white border-y border-[#092342]/10">
+      <div class="max-w-7xl mx-auto px-6">
+        <div class="flex flex-col md:flex-row md:items-end justify-between mb-16">
+          <div>
+            <span class="text-xs font-semibold uppercase tracking-widest text-[#B48F4C] block mb-2">مسارات التعلم</span>
+            <h2 class="text-3xl md:text-4xl font-bold tracking-tight text-[#092342]">برامجنا التعليمية</h2>
+          </div>
+          <span class="text-xs text-[#707A84] mt-2 md:mt-0 font-medium">يتم فتح باب التقديم وفق جدول دورات الأكاديمية</span>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          
+          <!-- Card 1: Technical Courses -->
+          <div class="bg-[#F9F7F1] border border-[#092342]/10 rounded flex flex-col overflow-hidden group">
+            <div class="h-44 bg-gray-200 flex items-center justify-center text-xs text-[#707A84]">
+              المسار التقني
+            </div>
+            <div class="p-6 flex flex-col flex-grow justify-between">
+              <div>
+                <span class="inline-block text-[11px] font-semibold text-[#092342] bg-white border border-[#092342]/10 px-2.5 py-0.5 rounded mb-3">
+                  تحديث فصلي
+                </span>
+                <h3 class="text-lg font-bold text-[#092342] mb-2">المسارات التقنية (Technical)</h3>
+                <p class="text-xs text-[#707A84] leading-relaxed mb-4">
+                  برامج تطبيقية تشمل البرمجة، تحليل البيانات، وأساسيات التطوير البرمجي مع تدريب تفاعلي.
+                </p>
+              </div>
+              <a href="contact.html" class="inline-flex items-center text-xs font-semibold text-[#092342] hover:text-[#B48F4C] transition">
+                تفاصيل المسار والتسجيل &larr;
+              </a>
+            </div>
+          </div>
+
+          <!-- Card 2: Soft Skills -->
+          <div class="bg-[#F9F7F1] border border-[#092342]/10 rounded flex flex-col overflow-hidden group">
+            <div class="h-44 bg-gray-200 flex items-center justify-center text-xs text-[#707A84]">
+              الإدارة والمهارات الشخصية
+            </div>
+            <div class="p-6 flex flex-col flex-grow justify-between">
+              <div>
+                <span class="inline-block text-[11px] font-semibold text-[#092342] bg-white border border-[#092342]/10 px-2.5 py-0.5 rounded mb-3">
+                  ورش عمل دورية
+                </span>
+                <h3 class="text-lg font-bold text-[#092342] mb-2">المهارات الشخصية (Soft Skills)</h3>
+                <p class="text-xs text-[#707A84] leading-relaxed mb-4">
+                  التواصل الفعال، القيادة، مهارات العرض والإلقاء، والتخطيط الوظيفي وإعداد السيرة الذاتية.
+                </p>
+              </div>
+              <a href="contact.html" class="inline-flex items-center text-xs font-semibold text-[#092342] hover:text-[#B48F4C] transition">
+                تفاصيل المسار والتسجيل &larr;
+              </a>
+            </div>
+          </div>
+
+          <!-- Card 3: Quran & Languages -->
+          <div class="bg-[#F9F7F1] border border-[#092342]/10 rounded flex flex-col overflow-hidden group">
+            <div class="h-44 bg-gray-200 flex items-center justify-center text-xs text-[#707A84]">
+              القرآن واللغات
+            </div>
+            <div class="p-6 flex flex-col flex-grow justify-between">
+              <div>
+                <span class="inline-block text-[11px] font-semibold text-[#092342] bg-white border border-[#092342]/10 px-2.5 py-0.5 rounded mb-3">
+                  حلقات مستمرة
+                </span>
+                <h3 class="text-lg font-bold text-[#092342] mb-2">القرآن والتجويد واللغات</h3>
+                <p class="text-xs text-[#707A84] leading-relaxed mb-4">
+                  حلقات مخصصة لضبط التلاوة وأحكام التجويد، بالإضافة إلى نوادي ممارسة وتطوير اللغات.
+                </p>
+              </div>
+              <a href="contact.html" class="inline-flex items-center text-xs font-semibold text-[#092342] hover:text-[#B48F4C] transition">
+                تفاصيل المسار والتسجيل &larr;
+              </a>
+            </div>
+          </div>
+
+          <!-- Card 4: Camps -->
+          <div class="bg-[#F9F7F1] border border-[#092342]/10 rounded flex flex-col overflow-hidden group">
+            <div class="h-44 bg-gray-200 flex items-center justify-center text-xs text-[#707A84]">
+              المعسكرات التدريبية
+            </div>
+            <div class="p-6 flex flex-col flex-grow justify-between">
+              <div>
+                <span class="inline-block text-[11px] font-semibold text-[#092342] bg-white border border-[#092342]/10 px-2.5 py-0.5 rounded mb-3">
+                  معسكرات مكثفة
+                </span>
+                <h3 class="text-lg font-bold text-[#092342] mb-2">معسكرات التدريب (Camps)</h3>
+                <p class="text-xs text-[#707A84] leading-relaxed mb-4">
+                  تجربة تدريبية مكثفة تركز على حل التحديات والمشاريع الجماعية في فترات زمنية محددة.
+                </p>
+              </div>
+              <a href="contact.html" class="inline-flex items-center text-xs font-semibold text-[#092342] hover:text-[#B48F4C] transition">
+                تفاصيل المسار والتسجيل &larr;
+              </a>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= SECTION 4: HOW IT WORKS ================= -->
+    <section id="how-it-works" class="py-24 max-w-7xl mx-auto px-6">
+      <div class="text-center max-w-xl mx-auto mb-16">
+        <span class="text-xs font-semibold uppercase tracking-widest text-[#B48F4C] block mb-2">آلية الانضمام</span>
+        <h2 class="text-3xl font-bold tracking-tight text-[#092342]">من الاهتمام إلى الأثر الحقيقي</h2>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8 relative">
+        <!-- Step 1 -->
+        <div class="relative bg-white p-8 rounded border border-[#092342]/10 text-center">
+          <div class="w-12 h-12 rounded-full bg-[#092342] text-[#B48F4C] font-bold text-lg flex items-center justify-center mx-auto mb-6">1</div>
+          <h3 class="text-lg font-bold text-[#092342] mb-2">1. استكشف المسار</h3>
+          <p class="text-xs text-[#707A84] leading-relaxed">
+            اطّلع على متطلبات البرنامج التدريبي ومخرجاته للتأكد من ملاءمته لأهدافك الحالية.
+          </p>
+        </div>
+
+        <!-- Step 2 -->
+        <div class="relative bg-white p-8 rounded border border-[#092342]/10 text-center">
+          <div class="w-12 h-12 rounded-full bg-[#092342] text-[#B48F4C] font-bold text-lg flex items-center justify-center mx-auto mb-6">2</div>
+          <h3 class="text-lg font-bold text-[#092342] mb-2">2. قدّم طلبك</h3>
+          <p class="text-xs text-[#707A84] leading-relaxed">
+            املأ استمارة التسجيل الرسمية عبر نموذج التقديم لضمان مقعدك في الدفعة القادمة.
+          </p>
+        </div>
+
+        <!-- Step 3 -->
+        <div class="relative bg-white p-8 rounded border border-[#092342]/10 text-center">
+          <div class="w-12 h-12 rounded-full bg-[#092342] text-[#B48F4C] font-bold text-lg flex items-center justify-center mx-auto mb-6">3</div>
+          <h3 class="text-lg font-bold text-[#092342] mb-2">3. شارك وتفاعل</h3>
+          <p class="text-xs text-[#707A84] leading-relaxed">
+            انضم إلى منصة Google Classroom ومجتمع الدفعة، وابدأ التطبيق العملي مباشرة.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= SECTION 5: COMMUNITY & GALLERY ================= -->
+    <section class="py-24 bg-white border-y border-[#092342]/10">
+      <div class="max-w-7xl mx-auto px-6">
+        <div class="max-w-2xl mb-12">
+          <span class="text-xs font-semibold uppercase tracking-widest text-[#B48F4C] block mb-2">المجتمع الطلابي</span>
+          <h2 class="text-3xl font-bold tracking-tight text-[#092342]">بأيدي الطلاب.. وبشغف حقيقي</h2>
+          <p class="text-sm text-[#707A84] mt-2 leading-relaxed">توثيق حي للورش الميدانية، الجلسات التفاعلية، ومشاركات الفريق.</p>
+        </div>
+
+        <!-- Editorial Grid Placeholders -->
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <div class="aspect-square bg-gray-100 rounded border border-[#092342]/10 flex items-center justify-center text-xs text-[#707A84] text-center p-3">
+            ورش تدريبية
+          </div>
+          <div class="aspect-square bg-gray-100 rounded border border-[#092342]/10 flex items-center justify-center text-xs text-[#707A84] text-center p-3">
+            جلسات تفاعلية
+          </div>
+          <div class="aspect-square bg-gray-100 rounded border border-[#092342]/10 flex items-center justify-center text-xs text-[#707A84] text-center p-3">
+            فعاليات الأكاديمية
+          </div>
+          <div class="aspect-square bg-gray-100 rounded border border-[#092342]/10 flex items-center justify-center text-xs text-[#707A84] text-center p-3">
+            فريق NGD
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= SECTION 6: EVENTS & CAMPS ================= -->
+    <section id="events" class="py-24 max-w-7xl mx-auto px-6">
+      <div class="flex flex-col md:flex-row md:items-end justify-between mb-16">
+        <div>
+          <span class="text-xs font-semibold uppercase tracking-widest text-[#B48F4C] block mb-2">الأجندة</span>
+          <h2 class="text-3xl font-bold tracking-tight text-[#092342]">الفعاليات والمعسكرات القادمة</h2>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <!-- Event Card Placeholder -->
+        <div class="bg-white border border-[#092342]/10 p-8 rounded flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between mb-4">
+              <span class="px-2.5 py-1 rounded bg-[#B48F4C]/10 text-[#B48F4C] text-[11px] font-semibold">متاح للتسجيل قريباً</span>
+              <span class="text-xs text-[#707A84] font-medium">الإعلانات الرسمية</span>
+            </div>
+            <h3 class="text-xl font-bold text-[#092342] mb-3">تابع إعلاناتنا القادمة</h3>
+            <p class="text-sm text-[#707A84] leading-relaxed mb-6">
+              سيتم نشر تفاصيل الفعاليات ومواعيد التسجيل هنا فور اعتمادها رسميًا.
+            </p>
+          </div>
+          <div class="pt-4 border-t border-gray-100 flex items-center justify-between">
+            <span class="text-xs text-gray-400">تفاصيل التسجيل</span>
+            <span class="text-xs font-semibold text-[#707A84]">لا توجد فعالية معلنة حالياً</span>
+          </div>
+        </div>
+
+        <!-- Empty State Card for Integrity -->
+        <div class="bg-[#F9F7F1] border border-dashed border-[#092342]/20 p-8 rounded flex flex-col items-center justify-center text-center">
+          <svg class="w-10 h-10 text-[#707A84] mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+          </svg>
+          <h4 class="font-bold text-[#092342] mb-1">لا توجد فعاليات إضافية معلنة حالياً</h4>
+          <p class="text-xs text-[#707A84] max-w-sm">
+            يتم تحديث الجدول فور اعتماد اللجان التنظيمية للمواعيد الرسمية للمعسكرات القادمة.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= SECTION 7: VOLUNTEER RECRUITMENT ================= -->
+    <section id="volunteer" class="py-24 bg-[#092342] text-white">
+      <div class="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+        <div class="lg:col-span-8 space-y-4">
+          <span class="text-xs font-semibold uppercase tracking-widest text-[#B48F4C] block">انضم كمتطوع</span>
+          <h2 class="text-3xl md:text-4xl font-bold tracking-tight">كن جزءاً مما نصنعه اليوم للمستقبل</h2>
+          <p class="text-gray-300 text-base leading-relaxed max-w-2xl">
+            شارك مهاراتك وخبراتك، واعمل ضمن فريق شغوف يساهم في بناء محتوى وتجارب تعليمية ذات أثر حقيقي للطلاب.
+          </p>
+          <div class="pt-2 flex flex-wrap gap-2 text-xs text-gray-300">
+            <span class="px-3 py-1 bg-white/5 border border-white/10 rounded">التصميم والميديا (Media & Graphics)</span>
+            <span class="px-3 py-1 bg-white/5 border border-white/10 rounded">كتابة وصناعة المحتوى</span>
+            <span class="px-3 py-1 bg-white/5 border border-white/10 rounded">التسويق والعلاقات العامة</span>
+            <span class="px-3 py-1 bg-white/5 border border-white/10 rounded">التنظيم وإدارة البرامج</span>
+          </div>
+        </div>
+        <div class="lg:col-span-4 flex lg:justify-end">
+          <a href="contact.html" class="px-8 py-4 bg-[#B48F4C] text-[#092342] font-bold text-sm rounded hover:bg-[#9C7B3E] transition shadow-lg w-full sm:w-auto text-center">
+            تقديم طلب انضمام للفريق &larr;
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= LEARNING HUB INTEGRATION (ENTRY POINTS) ================= -->
+    <section class="py-16 bg-[#F9F7F1] border-b border-[#092342]/10">
+      <div class="max-w-7xl mx-auto px-6">
+        <div class="bg-white border border-[#092342]/10 rounded p-8 flex flex-col md:flex-row items-center justify-between gap-6">
+          <div>
+            <h3 class="text-lg font-bold text-[#092342] mb-1">بوابة الطلاب والموارد التعليمية</h3>
+            <p class="text-xs text-[#707A84]">روابط الوصول المباشر لبيئات التعلم المعتمدة للأكاديمية.</p>
+          </div>
+          <div class="flex flex-wrap gap-3">
+            <a href="contact.html" class="px-4 py-2 border border-[#092342]/20 hover:border-[#092342] rounded text-xs font-semibold text-[#092342] transition">
+              منصة الفصول (Google Classroom)
+            </a>
+            <a href="contact.html" class="px-4 py-2 border border-[#092342]/20 hover:border-[#092342] rounded text-xs font-semibold text-[#092342] transition">
+              حقيبة المواد (Google Drive)
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ================= SECTION 8: FOOTER ================= -->
+  <footer class="bg-[#092342] text-white pt-16 pb-12 border-t border-white/10 text-sm">
+    <div class="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-12 gap-10 pb-12 border-b border-white/10">
+      
+      <!-- Brand Summary -->
+      <div class="md:col-span-5 space-y-4">
+        <div class="flex items-center gap-3">
+          <div class="w-8 h-8 rounded bg-[#B48F4C] text-[#092342] flex items-center justify-center font-bold text-sm">
+            NGD
+          </div>
+          <span class="font-bold tracking-tight text-base">NGD ACADEMY</span>
+        </div>
+        <p class="text-xs text-[#707A84] leading-relaxed max-w-sm">
+          أكاديمية تدريب وتأهيل تأسست عام 2023، تقدم برامج مجانية تساعد الشباب على تنمية المهارات التقنية والإدارية والشخصية وربط التعلم بالتطبيق العملي.
+        </p>
+      </div>
+
+      <!-- Quick Links -->
+      <div class="md:col-span-3 space-y-3">
+        <h4 class="text-xs font-bold uppercase tracking-wider text-[#B48F4C]">روابط سريعة</h4>
+        <ul class="space-y-2 text-xs text-gray-300">
+          <li><a href="#about" class="hover:text-white transition">عن الأكاديمية</a></li>
+          <li><a href="#programs" class="hover:text-white transition">البرامج التدريبية</a></li>
+          <li><a href="#events" class="hover:text-white transition">المعسكرات والفعاليات</a></li>
+          <li><a href="#volunteer" class="hover:text-white transition">طلب التطوع</a></li>
+        </ul>
+      </div>
+
+      <!-- Contacts & Policy -->
+      <div class="md:col-span-4 space-y-3">
+        <h4 class="text-xs font-bold uppercase tracking-wider text-[#B48F4C]">التواصل والشفافية</h4>
+        <p class="text-xs text-[#707A84] leading-relaxed">
+          للتواصل والاستفسارات: ngd.academy@gmail.com
+        </p>
+        <div class="pt-2 text-xs">
+          <a href="privacy.html" class="text-gray-400 hover:text-white underline">سياسة الخصوصية</a>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="max-w-7xl mx-auto px-6 pt-8 flex flex-col sm:flex-row items-center justify-between text-xs text-[#707A84] gap-4">
+      <p>© 2026 NGD Academy. جميع الحقوق محفوظة.</p>
+      <p class="text-right">Student-led, Volunteer-based Educational Initiative.</p>
+    </div>
+  </footer>
+
+  <!-- Script for Mobile Menu Toggle -->
+  <script>
+    const toggleBtn = document.getElementById('mobile-toggle');
+    const menu = document.getElementById('mobile-menu');
+
+    toggleBtn.addEventListener('click', () => {
+      menu.classList.toggle('hidden');
+    });
+  </script>
+</body>
+</html>
