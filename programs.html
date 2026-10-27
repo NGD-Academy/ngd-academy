@@ -1,11 +1,13 @@
+
 <!doctype html>
 <html lang="ar" dir="rtl">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="الكورسات المتاحة في NGD Academy">
-  <title>الكورسات المتاحة | NGD Academy</title>
+  <meta name="description" content="الكورسات الحالية والسابقة في NGD Academy">
+  <title>الكورسات والمسارات | NGD Academy</title>
   <link rel="stylesheet" href="assets/site.css">
+
   <style>
     :root {
       --navy: #092342;
@@ -13,48 +15,298 @@
       --ivory: #F9F7F1;
       --muted: #707A84;
     }
+
     * { box-sizing: border-box; }
-    body { margin: 0; background: var(--ivory); color: var(--navy); font-family: Arial, sans-serif; }
-    .top { background: var(--navy); color: white; padding: 18px 5%; display:flex; align-items:center; justify-content:space-between; gap:20px; flex-wrap:wrap; }
-    .brand { color:white; font-weight:700; text-decoration:none; letter-spacing:.04em; }
-    .nav { display:flex; gap:18px; flex-wrap:wrap; }
-    .nav a { color:white; text-decoration:none; font-size:14px; }
-    .nav a:hover { color:var(--gold); }
-    .hero { background:var(--navy); color:white; text-align:center; padding:54px 20px 62px; }
-    .eyebrow { color:var(--gold); font-size:12px; font-weight:700; letter-spacing:.15em; margin-bottom:14px; }
-    .hero h1 { font-size:clamp(30px,4vw,44px); margin:0 0 14px; }
-    .hero p { color:#e2e8f0; margin:0 auto; max-width:720px; line-height:1.9; }
-    .container { width:min(1120px,90%); margin:0 auto; padding:48px 0 64px; }
-    .section-head { display:flex; justify-content:space-between; align-items:end; gap:16px; flex-wrap:wrap; margin-bottom:22px; }
-    .section-head h2 { margin:0 0 8px; font-size:28px; }
-    .section-head p { margin:0; color:var(--muted); line-height:1.8; }
-    .count { border:1px solid #e5d6b9; border-radius:999px; padding:8px 14px; white-space:nowrap; font-size:13px; }
-    .course-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:20px; }
-    .course-card { background:white; border:1px solid #e1e5e9; border-radius:14px; overflow:hidden; display:flex; flex-direction:column; min-height:100%; box-shadow:0 5px 20px rgba(9,35,66,.04); }
-    .course-image { width:100%; height:180px; object-fit:cover; background:#e8ebef; }
-    .course-image-placeholder { height:120px; background:linear-gradient(135deg,#092342,#284760); }
-    .course-body { padding:22px; display:flex; flex-direction:column; flex:1; }
-    .course-meta { display:flex; align-items:center; justify-content:space-between; gap:10px; margin-bottom:12px; }
-    .pill { display:inline-block; border-radius:999px; padding:5px 10px; font-size:12px; background:#f7f0e3; color:#7b602f; }
-    .course-card h3 { margin:0 0 10px; font-size:20px; line-height:1.5; }
-    .course-card p { color:var(--muted); font-size:14px; line-height:1.9; margin:0 0 18px; white-space:pre-line; }
-    .course-actions { margin-top:auto; display:flex; flex-wrap:wrap; gap:10px; }
-    .btn { display:inline-block; background:var(--gold); color:var(--navy); padding:11px 15px; border-radius:7px; text-decoration:none; font-weight:700; font-size:13px; }
-    .btn:hover { filter:brightness(.96); }
-    .btn-secondary { border:1px solid #d7dce2; color:var(--navy); background:white; }
-    .notice { margin-top:28px; padding:16px 18px; border:1px solid #ead6ad; border-radius:10px; background:#fff7e8; color:#66512c; line-height:1.8; font-size:13px; }
-    .state { background:white; border:1px solid #e1e5e9; border-radius:14px; padding:34px 20px; text-align:center; color:var(--muted); line-height:1.9; }
-    .state h3 { color:var(--navy); margin:0 0 8px; }
-    .back-link { display:inline-block; color:var(--navy); margin-bottom:22px; text-decoration:none; font-weight:700; }
-    footer { background:var(--navy); color:white; text-align:center; padding:24px 16px; font-size:13px; line-height:2; }
-    footer a { color:#e5c98d; }
-    @media(max-width:850px) { .course-grid { grid-template-columns:repeat(2,minmax(0,1fr)); } }
-    @media(max-width:560px) { .course-grid { grid-template-columns:1fr; } .top { align-items:flex-start; } .nav { gap:12px; } .container { padding-top:32px; } }
+
+    body {
+      margin: 0;
+      background: var(--ivory);
+      color: var(--navy);
+      font-family: Arial, sans-serif;
+    }
+
+    .top {
+      background: var(--navy);
+      color: white;
+      padding: 18px 5%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .brand {
+      color: white;
+      font-weight: 700;
+      text-decoration: none;
+      letter-spacing: .04em;
+    }
+
+    .nav {
+      display: flex;
+      gap: 18px;
+      flex-wrap: wrap;
+    }
+
+    .nav a {
+      color: white;
+      text-decoration: none;
+      font-size: 14px;
+    }
+
+    .nav a:hover { color: var(--gold); }
+
+    .hero {
+      background: var(--navy);
+      color: white;
+      text-align: center;
+      padding: 54px 20px 62px;
+    }
+
+    .eyebrow {
+      color: var(--gold);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: .12em;
+      margin-bottom: 14px;
+    }
+
+    .hero h1 {
+      font-size: clamp(30px, 4vw, 44px);
+      margin: 0 0 14px;
+    }
+
+    .hero p {
+      color: #e2e8f0;
+      margin: 0 auto;
+      max-width: 720px;
+      line-height: 1.9;
+    }
+
+    .container {
+      width: min(1120px, 90%);
+      margin: 0 auto;
+      padding: 42px 0 64px;
+    }
+
+    .back-link {
+      display: inline-block;
+      color: var(--navy);
+      margin-bottom: 28px;
+      text-decoration: none;
+      font-weight: 700;
+    }
+
+    .section-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: end;
+      gap: 16px;
+      flex-wrap: wrap;
+      margin-bottom: 22px;
+    }
+
+    .section-head h2 {
+      margin: 0 0 8px;
+      font-size: 27px;
+    }
+
+    .section-head p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.8;
+    }
+
+    .count {
+      border: 1px solid #e5d6b9;
+      border-radius: 999px;
+      padding: 8px 14px;
+      white-space: nowrap;
+      font-size: 13px;
+    }
+
+    .course-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 20px;
+    }
+
+    .course-card {
+      background: white;
+      border: 1px solid #e1e5e9;
+      border-radius: 14px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      min-height: 100%;
+      box-shadow: 0 5px 20px rgba(9, 35, 66, .04);
+    }
+
+    .course-image {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+      background: #e8ebef;
+    }
+
+    .course-image-placeholder {
+      height: 120px;
+      background: linear-gradient(135deg, #092342, #284760);
+    }
+
+    .course-body {
+      padding: 22px;
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+    }
+
+    .course-meta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 12px;
+    }
+
+    .pill {
+      display: inline-block;
+      border-radius: 999px;
+      padding: 6px 11px;
+      font-size: 12px;
+      background: #f7f0e3;
+      color: #7b602f;
+    }
+
+    .pill-open {
+      background: #e8f5ec;
+      color: #21683b;
+    }
+
+    .pill-completed {
+      background: #edf0f4;
+      color: #596575;
+    }
+
+    .pill-coming {
+      background: #fff3d8;
+      color: #805c13;
+    }
+
+    .course-card h3 {
+      margin: 0 0 10px;
+      font-size: 20px;
+      line-height: 1.5;
+    }
+
+    .course-card p {
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.9;
+      margin: 0 0 16px;
+      white-space: pre-line;
+    }
+
+    .course-details {
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.9;
+      margin-bottom: 18px;
+    }
+
+    .course-details div {
+      margin-bottom: 3px;
+      overflow-wrap: anywhere;
+    }
+
+    .course-actions {
+      margin-top: auto;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .btn {
+      display: inline-block;
+      background: var(--gold);
+      color: var(--navy);
+      padding: 11px 15px;
+      border-radius: 7px;
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 13px;
+      text-align: center;
+    }
+
+    .btn:hover { filter: brightness(.96); }
+
+    .btn-secondary {
+      border: 1px solid #d7dce2;
+      color: var(--navy);
+      background: white;
+    }
+
+    .notice {
+      margin-top: 28px;
+      padding: 16px 18px;
+      border: 1px solid #ead6ad;
+      border-radius: 10px;
+      background: #fff7e8;
+      color: #66512c;
+      line-height: 1.8;
+      font-size: 13px;
+    }
+
+    .state {
+      background: white;
+      border: 1px solid #e1e5e9;
+      border-radius: 14px;
+      padding: 34px 20px;
+      text-align: center;
+      color: var(--muted);
+      line-height: 1.9;
+      grid-column: 1 / -1;
+    }
+
+    .state h3 {
+      color: var(--navy);
+      margin: 0 0 8px;
+    }
+
+    .course-section { margin-top: 44px; }
+
+    footer {
+      background: var(--navy);
+      color: white;
+      text-align: center;
+      padding: 24px 16px;
+      font-size: 13px;
+      line-height: 2;
+    }
+
+    footer a { color: #e5c98d; }
+
+    @media(max-width: 850px) {
+      .course-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media(max-width: 560px) {
+      .course-grid { grid-template-columns: 1fr; }
+      .top { align-items: flex-start; }
+      .nav { gap: 12px; }
+      .container { padding-top: 30px; }
+    }
   </style>
 </head>
+
 <body>
   <header class="top">
     <a class="brand" href="index.html">NGD ACADEMY</a>
+
     <nav class="nav" aria-label="القائمة الرئيسية">
       <a href="index.html">الرئيسية</a>
       <a href="index.html#about">عن الأكاديمية</a>
@@ -66,26 +318,55 @@
 
   <section class="hero">
     <div class="eyebrow">NGD ACADEMY · LEARN • BUILD • LEAD</div>
-    <h1 id="page-title">الكورسات المتاحة</h1>
-    <p id="page-description">تعرّف على الكورسات والبرامج التي أعلنت الأكاديمية عن فتح باب التقديم لها.</p>
+    <h1 id="page-title">الكورسات والبرامج</h1>
+    <p id="page-description">
+      اكتشف الكورسات الحالية، وتابع التسجيلات والمواد التعليمية للكورسات السابقة.
+    </p>
   </section>
 
   <main class="container">
-    <a class="back-link" href="index.html#programs">← الرجوع إلى كل المسارات</a>
-    <div class="section-head">
-      <div>
-        <h2 id="list-title">الكورسات المتاحة</h2>
-        <p id="list-description">تُحدّث القائمة بناءً على الكورسات المنشورة في قاعدة بيانات الأكاديمية.</p>
-      </div>
-      <span id="course-count" class="count">جارٍ تحميل الكورسات…</span>
-    </div>
+    <a class="back-link" href="index.html#programs">
+      ← الرجوع إلى كل المسارات
+    </a>
 
-    <div id="course-list" class="course-grid" aria-live="polite">
-      <div class="state"><h3>جارٍ تحميل الكورسات</h3><p>لحظات من فضلك…</p></div>
-    </div>
+    <section>
+      <div class="section-head">
+        <div>
+          <h2 id="current-title">الكورسات الحالية والقادمة</h2>
+          <p>تابع الكورسات التي فُتح التسجيل لها أو سيبدأ التقديم عليها قريبًا.</p>
+        </div>
+        <span id="current-count" class="count">جارٍ التحميل…</span>
+      </div>
+
+      <div id="current-list" class="course-grid" aria-live="polite">
+        <div class="state">
+          <h3>جارٍ تحميل الكورسات</h3>
+          <p>لحظات من فضلك…</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="course-section">
+      <div class="section-head">
+        <div>
+          <h2 id="archive-title">الكورسات السابقة والتسجيلات</h2>
+          <p>ارجع إلى الكورسات السابقة واستفد من التسجيلات المتاحة على تيليجرام.</p>
+        </div>
+        <span id="archive-count" class="count">جارٍ التحميل…</span>
+      </div>
+
+      <div id="archive-list" class="course-grid" aria-live="polite">
+        <div class="state">
+          <h3>جارٍ تحميل التسجيلات</h3>
+          <p>لحظات من فضلك…</p>
+        </div>
+      </div>
+    </section>
 
     <div class="notice">
-      يُعلن عن مواعيد التقديم والتفاصيل النهائية عبر القنوات الرسمية للأكاديمية. لا يظهر هنا إلا الكورس المنشور بحالة «Open» أو «Coming Soon» في قاعدة البيانات.
+      تُحدَّث الكورسات من قاعدة بيانات الأكاديمية. رابط «شاهد التسجيلات»
+      يفتح أرشيف تيليجرام، وقد يتطلب الانضمام إلى القناة أو المجموعة.
+      تأكد من إضافة رابط التسجيلات في عمود archive_url لكل كورس منتهٍ.
     </div>
   </main>
 
@@ -96,136 +377,317 @@
   </footer>
 
   <script>
-    const API_URL = "https://script.google.com/macros/s/AKfycbxjhlwCmegcjdANbBed2yNxRavn_1PfjTIeZKKVc0msk4g1xD16uLZlZdGuVoOnCQs/exec";
+    const API_URL =
+      "https://script.google.com/macros/s/AKfycbxjhlwCmegcjdANbBed2yNxRavn_1PfjTIeZKKVc0msk4g1xD16uLZlZdGuVoOnCQs/exec";
 
     const TRACKS = {
-      technology: { name: "المسار التكنولوجي", categories: ["technology", "technological", "التكنولوجيا", "المسار التكنولوجي", "تقني", "المسار التقني"] },
-      business: { name: "مسار الإدارة والأعمال", categories: ["business", "management", "الإدارة والأعمال", "إدارة وأعمال", "الإدارة", "الأعمال"] },
-      creative: { name: "مسار الإبداع وصناعة المحتوى", categories: ["creative", "content", "الإبداع وصناعة المحتوى", "صناعة المحتوى", "التصميم", "المحتوى"] },
-      professional: { name: "مسار المهارات الشخصية والمهنية", categories: ["professional", "soft skills", "المهارات الشخصية والمهنية", "المهارات الشخصية", "المهارات المهنية", "soft skills"] },
-      languages: { name: "مسار اللغات", categories: ["languages", "language", "اللغات", "اللغة الإنجليزية", "اللغة"] },
-      research: { name: "مسار البحث العلمي والتعلم الأكاديمي", categories: ["research", "academic", "البحث العلمي والتعلم الأكاديمي", "البحث العلمي", "التعلم الأكاديمي"] },
-      camps: { name: "المعسكرات والبرامج المكثفة", categories: ["camps", "camp", "المعسكرات والبرامج المكثفة", "المعسكرات", "البرامج المكثفة"] },
-      training: { name: "مسار التدريب والتعليم", categories: ["training", "education", "التدريب والتعليم", "التدريب", "التعليم", "إعداد المدربين"] }
+      technology: {
+        name: "المسار التكنولوجي",
+        categories: [
+          "technology", "technological", "التكنولوجيا",
+          "المسار التكنولوجي", "تقني", "المسار التقني"
+        ]
+      },
+      business: {
+        name: "مسار الإدارة والأعمال",
+        categories: [
+          "business", "management", "الإدارة والأعمال",
+          "إدارة وأعمال", "الإدارة", "الأعمال"
+        ]
+      },
+      creative: {
+        name: "مسار الإبداع وصناعة المحتوى",
+        categories: [
+          "creative", "content", "الإبداع وصناعة المحتوى",
+          "صناعة المحتوى", "التصميم", "المحتوى"
+        ]
+      },
+      professional: {
+        name: "مسار المهارات الشخصية والمهنية",
+        categories: [
+          "professional", "soft skills",
+          "المهارات الشخصية والمهنية", "المهارات الشخصية",
+          "المهارات المهنية"
+        ]
+      },
+      languages: {
+        name: "مسار اللغات",
+        categories: ["languages", "language", "اللغات", "اللغة الإنجليزية", "اللغة"]
+      },
+      research: {
+        name: "مسار البحث العلمي والتعلم الأكاديمي",
+        categories: [
+          "research", "academic", "البحث العلمي والتعلم الأكاديمي",
+          "البحث العلمي", "التعلم الأكاديمي"
+        ]
+      },
+      camps: {
+        name: "المعسكرات والبرامج المكثفة",
+        categories: [
+          "camps", "camp", "المعسكرات والبرامج المكثفة",
+          "المعسكرات", "البرامج المكثفة"
+        ]
+      },
+      training: {
+        name: "مسار التدريب والتعليم",
+        categories: [
+          "training", "education", "التدريب والتعليم",
+          "التدريب", "التعليم", "إعداد المدربين"
+        ]
+      }
     };
 
     const params = new URLSearchParams(window.location.search);
     const trackKey = params.get("track");
     const selectedTrack = TRACKS[trackKey] || null;
+
     const pageTitle = document.getElementById("page-title");
     const pageDescription = document.getElementById("page-description");
-    const listTitle = document.getElementById("list-title");
-    const listDescription = document.getElementById("list-description");
-    const courseList = document.getElementById("course-list");
-    const courseCount = document.getElementById("course-count");
 
     if (selectedTrack) {
       pageTitle.textContent = selectedTrack.name;
-      pageDescription.textContent = "الكورسات والبرامج المنشورة ضمن هذا المسار فقط.";
-      listTitle.textContent = "كورسات المسار";
-      listDescription.textContent = "تظهر هنا الكورسات المطابقة لتصنيف هذا المسار في قاعدة البيانات.";
+      pageDescription.textContent =
+        "تعرّف على الكورسات الحالية والسابقة في هذا المسار، وشاهد التسجيلات المتاحة.";
     }
 
     function escapeHTML(value) {
       return String(value ?? "").replace(/[&<>"']/g, char => ({
-        "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#39;"
       }[char]));
     }
 
     function normalized(value) {
-      return String(value || "").trim().toLowerCase().replace(/[ـًٌٍَُِّْ]/g, "").replace(/\\s+/g, " ");
+      return String(value || "")
+        .trim()
+        .toLowerCase()
+        .replace(/[ـًٌٍَُِّْ]/g, "")
+        .replace(/\s+/g, " ");
     }
 
     function getCategory(course) {
-      return course.category || course.track || course.path || course.category_name || "";
+      return course.category || course.track ||
+        course.path || course.category_name || "";
     }
 
     function belongsToTrack(course, track) {
       const category = normalized(getCategory(course));
       if (!category) return false;
+
       return track.categories.some(item => {
         const normalizedItem = normalized(item);
-        return category === normalizedItem || category.includes(normalizedItem) || normalizedItem.includes(category);
+        return category === normalizedItem ||
+          category.includes(normalizedItem) ||
+          normalizedItem.includes(category);
       });
     }
 
     function safeURL(value) {
       const raw = String(value || "").trim();
       if (!raw) return "";
+
       try {
         const url = new URL(raw, window.location.href);
-        return ["https:", "http:"].includes(url.protocol) ? url.href : "";
+        return ["https:", "http:"].includes(url.protocol)
+          ? url.href
+          : "";
       } catch (_) {
         return "";
       }
     }
 
-    function renderCourse(course) {
-      const title = course.title || course.course_name || "كورس بدون عنوان";
-      const description = course.description || "سيتم إضافة تفاصيل الكورس قريبًا.";
-      const status = course.status || "";
-      const imageURL = safeURL(course.image_url || course.image);
-      const registrationURL = safeURL(course.registration_url || course.registration_link || course.url);
-      const image = imageURL
-        ? `<img class="course-image" src="${escapeHTML(imageURL)}" alt="${escapeHTML(title)}" loading="lazy">`
-        : `<div class="course-image-placeholder" aria-hidden="true"></div>`;
-      const statusLabel = status === "Open" ? "التسجيل مفتوح" : status === "Coming Soon" ? "قريبًا" : status;
-      const registrationButton = status === "Open" && registrationURL
-        ? `<a class="btn" href="${escapeHTML(registrationURL)}" target="_blank" rel="noopener noreferrer">التسجيل في الكورس</a>`
-        : "";
-      const detailButton = registrationURL && status !== "Open"
-        ? `<a class="btn btn-secondary" href="${escapeHTML(registrationURL)}" target="_blank" rel="noopener noreferrer">التفاصيل</a>`
-        : "";
+    function formatDate(value) {
+      const raw = String(value || "").trim();
+      if (!raw) return "";
 
-      return `<article class="course-card">
-        ${image}
-        <div class="course-body">
-          <div class="course-meta"><span class="pill">${escapeHTML(statusLabel)}</span></div>
-          <h3>${escapeHTML(title)}</h3>
-          <p>${escapeHTML(description)}</p>
-          <div class="course-actions">${registrationButton}${detailButton}</div>
-        </div>
-      </article>`;
+      const match = raw.match(/^(\d{4})-(\d{2})-(\d{2})$/);
+
+      if (!match) return raw;
+
+      return `${match[3]}/${match[2]}/${match[1]}`;
     }
 
-    function showState(title, description) {
-      courseList.className = "";
-      courseList.innerHTML = `<div class="state"><h3>${escapeHTML(title)}</h3><p>${escapeHTML(description)}</p></div>`;
+    function renderCourse(course, archived) {
+      const title = course.title || course.course_name || "كورس بدون عنوان";
+      const description =
+        course.description || "سيتم إضافة تفاصيل الكورس قريبًا.";
+
+      const status = String(course.status || "").trim();
+      const instructor = String(course.instructor || "").trim();
+      const startDate = formatDate(course.start_date);
+
+      const imageURL = safeURL(course.image_url || course.image);
+      const registrationURL = safeURL(
+        course.registration_url || course.registration_link || course.url
+      );
+      const archiveURL = safeURL(
+        course.archive_url || course.recordings_url || course.telegram_url
+      );
+
+      const image = imageURL
+        ? `<img class="course-image" src="${escapeHTML(imageURL)}"
+             alt="${escapeHTML(title)}" loading="lazy">`
+        : `<div class="course-image-placeholder" aria-hidden="true"></div>`;
+
+      let statusLabel = "قريبًا";
+      let statusClass = "pill-coming";
+
+      if (status === "Open") {
+        statusLabel = "التسجيل مفتوح";
+        statusClass = "pill-open";
+      } else if (status === "Completed") {
+        statusLabel = "كورس سابق";
+        statusClass = "pill-completed";
+      }
+
+      let actionButton = "";
+
+      if (archived) {
+        actionButton = archiveURL
+          ? `<a class="btn" href="${escapeHTML(archiveURL)}"
+                target="_blank" rel="noopener noreferrer">
+                شاهد التسجيلات
+             </a>`
+          : `<span class="pill">رابط التسجيلات غير مضاف بعد</span>`;
+      } else if (status === "Open" && registrationURL) {
+        actionButton = `<a class="btn" href="${escapeHTML(registrationURL)}"
+                          target="_blank" rel="noopener noreferrer">
+                          التسجيل في الكورس
+                        </a>`;
+      } else if (registrationURL) {
+        actionButton = `<a class="btn btn-secondary"
+                          href="${escapeHTML(registrationURL)}"
+                          target="_blank" rel="noopener noreferrer">
+                          التفاصيل
+                        </a>`;
+      }
+
+      const details = [
+        instructor ? `<div>👨‍🏫 المدرب: ${escapeHTML(instructor)}</div>` : "",
+        startDate ? `<div>📅 بداية الكورس: ${escapeHTML(startDate)}</div>` : "",
+        getCategory(course)
+          ? `<div>📚 التصنيف: ${escapeHTML(getCategory(course))}</div>`
+          : ""
+      ].filter(Boolean).join("");
+
+      return `
+        <article class="course-card">
+          ${image}
+          <div class="course-body">
+            <div class="course-meta">
+              <span class="pill ${statusClass}">${escapeHTML(statusLabel)}</span>
+            </div>
+
+            <h3>${escapeHTML(title)}</h3>
+            <p>${escapeHTML(description)}</p>
+
+            ${details
+              ? `<div class="course-details">${details}</div>`
+              : ""}
+
+            <div class="course-actions">${actionButton}</div>
+          </div>
+        </article>
+      `;
+    }
+
+    function showState(element, title, description) {
+      element.className = "course-grid";
+      element.innerHTML = `
+        <div class="state">
+          <h3>${escapeHTML(title)}</h3>
+          <p>${escapeHTML(description)}</p>
+        </div>
+      `;
     }
 
     async function loadCourses() {
+      const currentList = document.getElementById("current-list");
+      const archiveList = document.getElementById("archive-list");
+      const currentCount = document.getElementById("current-count");
+      const archiveCount = document.getElementById("archive-count");
+
       try {
         const response = await fetch(API_URL);
-        if (!response.ok) throw new Error("HTTP " + response.status);
+
+        if (!response.ok) {
+          throw new Error("HTTP " + response.status);
+        }
+
         const result = await response.json();
-        if (!result || result.success !== true || !Array.isArray(result.courses)) {
+
+        if (!result || result.success !== true ||
+            !Array.isArray(result.courses)) {
           throw new Error("Invalid response");
         }
 
-        const visibleCourses = result.courses.filter(course =>
-          ["Open", "Coming Soon"].includes(String(course.status || "").trim())
+        const courses = result.courses.filter(course =>
+          ["Open", "Coming Soon", "Completed"].includes(
+            String(course.status || "").trim()
+          )
         );
-        const shownCourses = selectedTrack
-          ? visibleCourses.filter(course => belongsToTrack(course, selectedTrack))
-          : visibleCourses;
 
-        courseCount.textContent = `${shownCourses.length} كورس`;
-        if (!shownCourses.length) {
+        const filteredCourses = selectedTrack
+          ? courses.filter(course => belongsToTrack(course, selectedTrack))
+          : courses;
+
+        const currentCourses = filteredCourses.filter(course =>
+          ["Open", "Coming Soon"].includes(
+            String(course.status || "").trim()
+          )
+        );
+
+        const archivedCourses = filteredCourses.filter(course =>
+          String(course.status || "").trim() === "Completed"
+        );
+
+        currentCount.textContent = `${currentCourses.length} كورس`;
+        archiveCount.textContent = `${archivedCourses.length} كورس`;
+
+        if (currentCourses.length) {
+          currentList.className = "course-grid";
+          currentList.innerHTML = currentCourses
+            .map(course => renderCourse(course, false))
+            .join("");
+        } else {
           showState(
-            selectedTrack ? "لا توجد كورسات معلنة في هذا المسار حاليًا" : "لا توجد كورسات معلنة حاليًا",
-            "سيتم عرض الكورسات هنا تلقائيًا عند إضافتها إلى قاعدة البيانات ونشرها بحالة Open أو Coming Soon، مع تحديد التصنيف الصحيح."
+            currentList,
+            "لا توجد كورسات حالية أو قادمة",
+            "ستظهر الكورسات هنا عند نشرها بحالة Open أو Coming Soon."
           );
-          return;
         }
 
-        courseList.className = "course-grid";
-        courseList.innerHTML = shownCourses.map(renderCourse).join("");
+        if (archivedCourses.length) {
+          archiveList.className = "course-grid";
+          archiveList.innerHTML = archivedCourses
+            .map(course => renderCourse(course, true))
+            .join("");
+        } else {
+          showState(
+            archiveList,
+            "لا توجد كورسات سابقة في هذا المسار",
+            "ستظهر الكورسات المنتهية هنا عند تسجيل حالتها Completed في قاعدة البيانات."
+          );
+        }
       } catch (error) {
         console.error("Failed to load NGD courses:", error);
-        courseCount.textContent = "تعذّر التحميل";
+
+        currentCount.textContent = "تعذّر التحميل";
+        archiveCount.textContent = "تعذّر التحميل";
+
         showState(
+          currentList,
           "لم نتمكن من تحميل الكورسات",
-          "تحقق من اتصال الإنترنت ورابط قاعدة البيانات، ثم أعد تحميل الصفحة. إذا استمرت المشكلة، راجع نشر تطبيق Google Apps Script."
+          "تحقق من الاتصال بالإنترنت ورابط قاعدة البيانات، ثم أعد تحميل الصفحة."
+        );
+
+        showState(
+          archiveList,
+          "تعذّر تحميل التسجيلات",
+          "حاول تحديث الصفحة مرة أخرى."
         );
       }
     }
