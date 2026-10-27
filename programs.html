@@ -1,1 +1,677 @@
-<!doctype html><html lang="ar" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="البرامج والمسارات | NGD Academy"><title>البرامج والمسارات | NGD Academy</title><link rel="stylesheet" href="assets/site.css"></head><body><header class="top"><a class="brand" href="index.html">NGD ACADEMY</a><nav class="nav"><a href="index.html">الرئيسية</a><a href="index.html#about">عن الأكاديمية</a><a href="index.html#programs">البرامج</a><a href="events.html">الفعاليات</a><a href="volunteer.html">التطوع</a><a href="contact.html">تواصل معنا</a></nav></header><section class="hero"><div class="eyebrow">NGD ACADEMY</div><h1>البرامج والمسارات</h1><p>تتنوع البرامج حسب احتياجات المتعلمين وجدول فتح باب التقديم.</p></section><main class="container"><div class="grid"><article class="card"><span class="pill">تقني</span><h2>المسار التقني</h2><p>برامج في تطوير المواقع والبرمجة والذكاء الاصطناعي وأمن المعلومات ومجالات تقنية أخرى.</p><a class="btn" href="contact.html">استفسر عن التقديم</a></article><article class="card"><span class="pill">إدارة وأعمال</span><h2>الإدارة والأعمال</h2><p>موضوعات مثل الموارد البشرية، التسويق الرقمي، وإدارة الفعاليات.</p><a class="btn" href="contact.html">استفسر عن التقديم</a></article><article class="card"><span class="pill">مهارات شخصية</span><h2>التطوير الشخصي</h2><p>ورش عمل لتنمية المهارات الناعمة والاجتماعية والتعامل مع الضغوط.</p><a class="btn" href="contact.html">استفسر عن التقديم</a></article><article class="card"><span class="pill">إبداع ومحتوى</span><h2>الإبداع وصناعة المحتوى</h2><p>مسارات تشمل كتابة المحتوى، التصميم الجرافيكي، والتعليق الصوتي.</p><a class="btn" href="contact.html">استفسر عن التقديم</a></article></div><p class="notice">مواعيد التقديم والتفاصيل الدقيقة لكل كورس تُعلن من خلال قنوات الأكاديمية الرسمية. هذه الصفحة لا تعرض مواعيد غير مؤكدة.</p></main><footer>© 2026 NGD Academy · أكاديمية تدريب وتأهيل مجانية تأسست عام 2023 · <a href="mailto:ngd.academy@gmail.com">ngd.academy@gmail.com</a> · <a href="privacy.html">سياسة الخصوصية</a></footer></body></html>
+
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="تعرّف على المسارات والكورسات التدريبية في NGD Academy.">
+  <meta name="theme-color" content="#092342">
+  <title>البرامج والمسارات | NGD Academy</title>
+  <link rel="stylesheet" href="assets/site.css">
+
+  <style>
+    :root {
+      --ngd-navy: #092342;
+      --ngd-gold: #B48F4C;
+      --ngd-ivory: #F9F7F1;
+      --ngd-gray: #707A84;
+      --ngd-border: #E5E7EB;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      background: var(--ngd-ivory);
+      color: var(--ngd-navy);
+      font-family: Arial, Tahoma, sans-serif;
+      line-height: 1.8;
+    }
+
+    a { color: inherit; }
+
+    .top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      flex-wrap: wrap;
+      padding: 18px max(5%, calc((100% - 1180px) / 2));
+      background: var(--ngd-navy);
+      color: white;
+    }
+
+    .brand {
+      color: white;
+      font-size: 17px;
+      font-weight: 800;
+      letter-spacing: 1px;
+      text-decoration: none;
+    }
+
+    .nav {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .nav a {
+      color: white;
+      font-size: 13px;
+      text-decoration: none;
+      opacity: .9;
+    }
+
+    .nav a:hover { color: #E5C98F; }
+
+    .hero {
+      padding: 64px 20px 58px;
+      text-align: center;
+      color: white;
+      background:
+        radial-gradient(ellipse at top, #173C63 0%, transparent 65%),
+        var(--ngd-navy);
+    }
+
+    .eyebrow {
+      display: inline-block;
+      color: #E5C98F;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      margin-bottom: 12px;
+    }
+
+    .hero h1 {
+      margin: 0 0 12px;
+      font-size: clamp(30px, 5vw, 46px);
+      line-height: 1.35;
+    }
+
+    .hero p {
+      max-width: 620px;
+      margin: 0 auto;
+      color: #E1E8F0;
+      font-size: 15px;
+    }
+
+    .container {
+      width: min(1120px, 90%);
+      margin: 0 auto;
+      padding: 48px 0 64px;
+    }
+
+    .section-heading {
+      margin-bottom: 24px;
+    }
+
+    .section-heading h2 {
+      margin: 0 0 6px;
+      font-size: 25px;
+    }
+
+    .section-heading p {
+      margin: 0;
+      color: var(--ngd-gray);
+      font-size: 14px;
+    }
+
+    .tracks-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 18px;
+      margin-bottom: 52px;
+    }
+
+    .track-card {
+      position: relative;
+      overflow: hidden;
+      padding: 24px 20px;
+      background: white;
+      border: 1px solid var(--ngd-border);
+      border-radius: 12px;
+      transition: transform .2s ease, box-shadow .2s ease;
+    }
+
+    .track-card::before {
+      position: absolute;
+      content: "";
+      top: 0;
+      right: 0;
+      left: 0;
+      height: 4px;
+      background: var(--ngd-gold);
+    }
+
+    .track-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 12px 30px #0923420D;
+    }
+
+    .track-number {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 34px;
+      height: 34px;
+      margin-bottom: 12px;
+      border-radius: 9px;
+      background: var(--ngd-ivory);
+      color: var(--ngd-gold);
+      font-size: 13px;
+      font-weight: 800;
+    }
+
+    .track-card h3 {
+      margin: 0 0 10px;
+      font-size: 19px;
+    }
+
+    .track-card p {
+      margin: 0;
+      color: var(--ngd-gray);
+      font-size: 13px;
+    }
+
+    .courses-section {
+      scroll-margin-top: 20px;
+    }
+
+    .courses-heading {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+      padding-bottom: 16px;
+      margin-bottom: 22px;
+      border-bottom: 1px solid var(--ngd-border);
+    }
+
+    .courses-heading h2 {
+      margin: 0;
+      font-size: 25px;
+    }
+
+    .courses-heading p {
+      margin: 4px 0 0;
+      color: var(--ngd-gray);
+      font-size: 13px;
+    }
+
+    .course-count {
+      display: inline-flex;
+      align-items: center;
+      padding: 5px 12px;
+      border: 1px solid #B48F4C55;
+      border-radius: 999px;
+      color: var(--ngd-navy);
+      font-size: 12px;
+      white-space: nowrap;
+    }
+
+    .courses-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 20px;
+    }
+
+    .course-card {
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      min-width: 0;
+      background: white;
+      border: 1px solid var(--ngd-border);
+      border-radius: 12px;
+    }
+
+    .course-image {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 170px;
+      overflow: hidden;
+      background: #E9EDF1;
+      color: var(--ngd-gray);
+      font-size: 12px;
+    }
+
+    .course-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .course-content {
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+      align-items: stretch;
+      padding: 20px;
+    }
+
+    .course-meta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 12px;
+    }
+
+    .course-category,
+    .course-status {
+      display: inline-block;
+      padding: 4px 9px;
+      border-radius: 999px;
+      font-size: 11px;
+    }
+
+    .course-category {
+      background: var(--ngd-ivory);
+      color: var(--ngd-navy);
+    }
+
+    .course-status {
+      background: #E8F5E9;
+      color: #216E39;
+    }
+
+    .course-status.soon {
+      background: #FFF3D8;
+      color: #805A16;
+    }
+
+    .course-content h3 {
+      margin: 0 0 8px;
+      font-size: 19px;
+      line-height: 1.5;
+    }
+
+    .course-description {
+      margin: 0 0 16px;
+      color: var(--ngd-gray);
+      font-size: 13px;
+      white-space: pre-line;
+      overflow-wrap: anywhere;
+    }
+
+    .course-date {
+      margin: 0 0 16px;
+      color: var(--ngd-gray);
+      font-size: 12px;
+    }
+
+    .course-actions {
+      margin-top: auto;
+      padding-top: 8px;
+    }
+
+    .course-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      min-height: 44px;
+      padding: 10px 16px;
+      border: 1px solid var(--ngd-gold);
+      border-radius: 7px;
+      background: var(--ngd-gold);
+      color: var(--ngd-navy);
+      font-size: 13px;
+      font-weight: 700;
+      text-align: center;
+      text-decoration: none;
+      transition: background .2s ease;
+    }
+
+    .course-button:hover {
+      background: #C6A96C;
+    }
+
+    .course-button.disabled {
+      border-color: var(--ngd-border);
+      background: #F3F4F6;
+      color: var(--ngd-gray);
+      cursor: default;
+    }
+
+    .message {
+      padding: 28px 22px;
+      border: 1px solid var(--ngd-border);
+      border-radius: 12px;
+      background: white;
+      text-align: center;
+    }
+
+    .message h3 {
+      margin: 0 0 8px;
+      font-size: 18px;
+    }
+
+    .message p {
+      margin: 0;
+      color: var(--ngd-gray);
+      font-size: 14px;
+    }
+
+    .message.error {
+      border-color: #E6C6C6;
+    }
+
+    .notice {
+      margin: 28px 0 0;
+      padding: 16px 18px;
+      border: 1px solid #E8D3A5;
+      border-radius: 9px;
+      background: #FFF6E2;
+      color: var(--ngd-navy);
+      font-size: 13px;
+    }
+
+    .notice a {
+      font-weight: 700;
+      text-underline-offset: 3px;
+    }
+
+    footer {
+      padding: 24px 5%;
+      background: var(--ngd-navy);
+      color: #E1E8F0;
+      font-size: 12px;
+      text-align: center;
+    }
+
+    footer a { color: #E5C98F; }
+
+    @media (max-width: 900px) {
+      .tracks-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .courses-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+
+    @media (max-width: 600px) {
+      .top { padding: 16px 5%; }
+      .nav { gap: 12px; }
+      .nav a { font-size: 12px; }
+      .hero { padding: 46px 18px; }
+      .container { width: 92%; padding-top: 32px; }
+      .tracks-grid,
+      .courses-grid { grid-template-columns: 1fr; }
+      .track-card { padding: 20px; }
+      .course-image { height: 190px; }
+    }
+  </style>
+</head>
+
+<body>
+  <header class="top">
+    <a class="brand" href="index.html">NGD ACADEMY</a>
+
+    <nav class="nav" aria-label="القائمة الرئيسية">
+      <a href="index.html">الرئيسية</a>
+      <a href="index.html#about">عن الأكاديمية</a>
+      <a href="index.html#programs">البرامج</a>
+      <a href="events.html">الفعاليات</a>
+      <a href="volunteer.html">التطوع</a>
+      <a href="contact.html">تواصل معنا</a>
+    </nav>
+  </header>
+
+  <section class="hero">
+    <div class="eyebrow">NGD ACADEMY</div>
+    <h1>البرامج والمسارات</h1>
+    <p>
+      اكتشف المسارات التدريبية، وتابع الكورسات التي تعلن الأكاديمية
+      عن فتح باب التقديم لها.
+    </p>
+  </section>
+
+  <main class="container">
+    <section aria-labelledby="tracks-title">
+      <div class="section-heading">
+        <h2 id="tracks-title">المسارات التدريبية</h2>
+        <p>تعرّف على المجالات التي يمكن أن تندرج تحتها برامج الأكاديمية.</p>
+      </div>
+
+      <div class="tracks-grid">
+        <article class="track-card">
+          <span class="track-number">01</span>
+          <h3>المسار التقني</h3>
+          <p>مجالات البرمجة وتطوير المواقع والتقنيات الرقمية، وفق البرامج التي يتم الإعلان عنها.</p>
+        </article>
+
+        <article class="track-card">
+          <span class="track-number">02</span>
+          <h3>الإدارة والأعمال</h3>
+          <p>موضوعات الإدارة والتسويق وتنظيم الأعمال والفعاليات، حسب البرامج المتاحة.</p>
+        </article>
+
+        <article class="track-card">
+          <span class="track-number">03</span>
+          <h3>التطوير الشخصي</h3>
+          <p>تنمية المهارات الشخصية والتواصل والعمل الجماعي من خلال الأنشطة التدريبية المعلنة.</p>
+        </article>
+
+        <article class="track-card">
+          <span class="track-number">04</span>
+          <h3>الإبداع وصناعة المحتوى</h3>
+          <p>مجالات التصميم وكتابة المحتوى والإنتاج الإبداعي، وفق ما تعلنه الأكاديمية.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="courses-section" aria-labelledby="courses-title">
+      <div class="courses-heading">
+        <div>
+          <h2 id="courses-title">الكورسات المتاحة</h2>
+          <p>تُحدَّث القائمة بناءً على البيانات المنشورة في قاعدة الأكاديمية.</p>
+        </div>
+
+        <span class="course-count" id="course-count">جارٍ تحميل البيانات...</span>
+      </div>
+
+      <div id="courses-container" aria-live="polite">
+        <div class="message">
+          <h3>جارٍ تحميل الكورسات</h3>
+          <p>لحظات من فضلك...</p>
+        </div>
+      </div>
+    </section>
+
+    <p class="notice">
+      تُعلن مواعيد التقديم والتفاصيل النهائية عبر القنوات الرسمية للأكاديمية.
+      لا يُفتح التسجيل إلا من خلال رابط التسجيل المحدد لكل كورس.
+      <a href="contact.html">للاستفسارات العامة تواصل معنا.</a>
+    </p>
+  </main>
+
+  <footer>
+    © 2026 NGD Academy · أكاديمية تدريب وتأهيل مجانية تأسست عام 2023 ·
+    <a href="mailto:ngd.academy@gmail.com">ngd.academy@gmail.com</a> ·
+    <a href="privacy.html">سياسة الخصوصية</a>
+  </footer>
+
+  <script>
+    const COURSES_API =
+      "https://script.google.com/macros/s/AKfycbxjhlwCmegcjdANbBed2yNxRavn_1PfjTIeZKKVc0msk4g1xD16uLZlZdGuVoOnCQs/exec";
+
+    const coursesContainer = document.getElementById("courses-container");
+    const courseCount = document.getElementById("course-count");
+
+    const categoryNames = {
+      technical: "المسار التقني",
+      tech: "المسار التقني",
+      "تقني": "المسار التقني",
+      "المسار التقني": "المسار التقني",
+      business: "الإدارة والأعمال",
+      management: "الإدارة والأعمال",
+      "إدارة وأعمال": "الإدارة والأعمال",
+      "الإدارة والأعمال": "الإدارة والأعمال",
+      personal: "التطوير الشخصي",
+      soft_skills: "التطوير الشخصي",
+      "مهارات شخصية": "التطوير الشخصي",
+      "التطوير الشخصي": "التطوير الشخصي",
+      creative: "الإبداع وصناعة المحتوى",
+      content: "الإبداع وصناعة المحتوى",
+      "إبداع ومحتوى": "الإبداع وصناعة المحتوى",
+      "الإبداع وصناعة المحتوى": "الإبداع وصناعة المحتوى"
+    };
+
+    function escapeHTML(value) {
+      return String(value ?? "").replace(/[&<>"']/g, char => ({
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#39;"
+      })[char]);
+    }
+
+    function safeURL(value) {
+      try {
+        const url = new URL(String(value || ""));
+        if (url.protocol === "https:" || url.protocol === "http:") {
+          return url.href;
+        }
+      } catch (error) {}
+      return "";
+    }
+
+    function displayCategory(category) {
+      const raw = String(category || "").trim();
+      return categoryNames[raw] || raw || "برنامج تدريبي";
+    }
+
+    function formatDate(value) {
+      const raw = String(value || "").trim();
+      if (!raw) return "";
+
+      const date = new Date(raw);
+      if (Number.isNaN(date.getTime())) return raw;
+
+      return new Intl.DateTimeFormat("ar-EG", {
+        year: "numeric",
+        month: "long",
+        day: "numeric"
+      }).format(date);
+    }
+
+    function createCourseCard(course) {
+      const title = escapeHTML(course.title || "كورس تدريبي");
+      const description = escapeHTML(
+        course.description || "سيتم نشر تفاصيل هذا الكورس عند الإعلان عنها."
+      );
+      const category = escapeHTML(displayCategory(course.category));
+      const status = String(course.status || "").trim();
+      const imageURL = safeURL(course.image_url);
+      const registrationURL = safeURL(course.registration_url);
+      const date = formatDate(course.start_date);
+
+      const isOpen = status === "Open";
+      const isComingSoon = status === "Coming Soon";
+
+      const statusText = isOpen ? "التسجيل متاح" : "قريبًا";
+      const statusClass = isComingSoon ? "course-status soon" : "course-status";
+
+      let imageMarkup = '<span>NGD Academy</span>';
+      if (imageURL) {
+        imageMarkup =
+          '<img src="' + escapeHTML(imageURL) +
+          '" alt="' + title + '" loading="lazy">';
+      }
+
+      let buttonMarkup = "";
+      if (isOpen && registrationURL) {
+        buttonMarkup =
+          '<a class="course-button" href="' + escapeHTML(registrationURL) +
+          '" target="_blank" rel="noopener noreferrer">التسجيل في الكورس</a>';
+      } else if (isOpen) {
+        buttonMarkup =
+          '<span class="course-button disabled">رابط التسجيل غير متاح حاليًا</span>';
+      } else {
+        buttonMarkup =
+          '<span class="course-button disabled">سيتم الإعلان عن التفاصيل</span>';
+      }
+
+      return `
+        <article class="course-card">
+          <div class="course-image">${imageMarkup}</div>
+          <div class="course-content">
+            <div class="course-meta">
+              <span class="course-category">${category}</span>
+              <span class="${statusClass}">${statusText}</span>
+            </div>
+            <h3>${title}</h3>
+            <p class="course-description">${description}</p>
+            ${date ? `<p class="course-date">موعد البدء: ${escapeHTML(date)}</p>` : ""}
+            <div class="course-actions">${buttonMarkup}</div>
+          </div>
+        </article>
+      `;
+    }
+
+    async function loadCourses() {
+      try {
+        const response = await fetch(COURSES_API, {
+          method: "GET",
+          redirect: "follow"
+        });
+
+        if (!response.ok) {
+          throw new Error("تعذر الاتصال بمصدر البيانات.");
+        }
+
+        const result = await response.json();
+
+        if (!result || result.success !== true || !Array.isArray(result.courses)) {
+          throw new Error("استجابة البيانات غير صحيحة.");
+        }
+
+        const courses = result.courses.filter(course =>
+          course &&
+          (course.status === "Open" || course.status === "Coming Soon")
+        );
+
+        courseCount.textContent = `${courses.length} كورس`;
+
+        if (courses.length === 0) {
+          coursesContainer.innerHTML = `
+            <div class="message">
+              <h3>لا توجد كورسات معلنة حاليًا</h3>
+              <p>
+                الأكاديمية لم تعلن عن كورسات متاحة في الوقت الحالي.
+                تابع قنواتنا الرسمية لمعرفة الجديد.
+              </p>
+            </div>
+          `;
+          return;
+        }
+
+        coursesContainer.innerHTML =
+          '<div class="courses-grid">' +
+          courses.map(createCourseCard).join("") +
+          '</div>';
+
+      } catch (error) {
+        courseCount.textContent = "تعذر تحميل البيانات";
+
+        coursesContainer.innerHTML = `
+          <div class="message error">
+            <h3>لم نتمكن من تحميل الكورسات</h3>
+            <p>
+              قد يكون هناك تأخير في الاتصال بمصدر البيانات.
+              حاول تحديث الصفحة لاحقًا.
+            </p>
+          </div>
+        `;
+
+        console.error("NGD Courses API error:", error);
+      }
+    }
+
+    loadCourses();
+  </script>
+</body>
+</html>
