@@ -1,9 +1,6 @@
 
 /**
  * NGD Academy - Supabase Configuration
- * إعدادات الاتصال بقاعدة بيانات الأكاديمية
- *
- * المفتاح العام فقط؛ ممنوع وضع أي مفتاح سري هنا.
  */
 
 window.NGD_SUPABASE_CONFIG = {
