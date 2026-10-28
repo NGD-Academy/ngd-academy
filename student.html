@@ -1,0 +1,200 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="بوابة الطالب في NGD Academy">
+  <meta name="theme-color" content="#092342">
+  <title>بوابة الطالب | NGD Academy</title>
+  <link rel="stylesheet" href="assets/site.css">
+  <link rel="stylesheet" href="assets/portal.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="config/supabase-config.js"></script>
+  <script src="assets/portal-common.js"></script>
+</head>
+<body>
+  <header class="portal-header">
+    <a class="brand" href="index.html" aria-label="العودة إلى الموقع الرئيسي">
+      <span class="brand-mark">NGD</span>
+      <span>NGD ACADEMY<small style="display:block;color:#aeb9c5;font-size:.72rem;font-weight:400">بوابة الطالب</small></span>
+    </a>
+    <nav class="portal-nav" aria-label="التنقل الرئيسي">
+      <a href="index.html">الموقع الرئيسي</a>
+      <a href="admin.html" id="admin-link" class="hidden">لوحة الإدارة</a>
+      <button id="logout" type="button">تسجيل الخروج</button>
+    </nav>
+  </header>
+
+  <main class="wrap">
+    <div id="global-status" class="status hidden" role="status" aria-live="polite"></div>
+
+    <section class="hero">
+      <div class="eyebrow">STUDENT SPACE</div>
+      <h1 id="welcome">أهلًا بك في بوابة الطالب</h1>
+      <p class="muted">تابع الكورسات والإعلانات وتقدمك التعليمي من مكان واحد.</p>
+    </section>
+
+    <div class="grid">
+      <section class="card">
+        <h2>ملفي الشخصي</h2>
+        <div id="profile" class="muted">جارٍ تحميل بياناتك…</div>
+      </section>
+      <section class="card">
+        <h2>ملخص التعلم</h2>
+        <div id="summary" class="list"><div class="empty">جارٍ تحميل بيانات التعلم…</div></div>
+      </section>
+    </div>
+
+    <div class="section-title">
+      <h2>الكورسات المنشورة</h2>
+      <span id="course-count" class="pill">—</span>
+    </div>
+    <div id="courses" class="grid"><div class="empty">جارٍ تحميل الكورسات…</div></div>
+
+    <div class="section-title">
+      <h2>تسجيلاتي</h2>
+      <span class="muted small">الكورسات المرتبطة بحسابك</span>
+    </div>
+    <div id="enrollments" class="list"><div class="empty">جارٍ تحميل التسجيلات…</div></div>
+
+    <div class="section-title"><h2>الإعلانات</h2></div>
+    <div id="announcements" class="list"><div class="empty">جارٍ تحميل الإعلانات…</div></div>
+  </main>
+
+  <footer class="footer">© 2026 NGD Academy · <a href="mailto:ngd.academy@gmail.com">ngd.academy@gmail.com</a></footer>
+
+  <script>
+    (async () => {
+      const db = window.NGDPortal?.client;
+      const logoutButton = document.getElementById('logout');
+      logoutButton.addEventListener('click', () => NGDPortal.signOut());
+
+      const user = await NGDPortal.requireUser();
+      if (!user || !db) return;
+
+      const esc = NGDPortal.esc;
+      const metadata = user.user_metadata || {};
+      const displayName = metadata.full_name || metadata.name || user.email || 'طالب NGD';
+
+      document.getElementById('welcome').textContent = `أهلًا، ${displayName}`;
+
+      const avatarUrl = metadata.avatar_url || metadata.picture || '';
+      document.getElementById('profile').innerHTML = `
+        <div class="userline">
+          ${avatarUrl ? `<img class="avatar" src="${esc(avatarUrl)}" alt="">` : ''}
+          <div>
+            <strong>${esc(displayName)}</strong>
+            <div class="muted small">${esc(user.email || '')}</div>
+            <div class="muted small">معرّف الحساب: ${esc(user.id.slice(0, 8))}…</div>
+          </div>
+        </div>`;
+
+      const roleResult = await db
+        .from('user_roles')
+        .select('role')
+        .eq('user_id', user.id)
+        .maybeSingle();
+
+      if (roleResult.error) {
+        console.warn('Could not read user role:', roleResult.error.message);
+      } else if (roleResult.data?.role === 'admin') {
+        document.getElementById('admin-link').classList.remove('hidden');
+      }
+
+      const [coursesResult, enrollmentsResult, announcementsResult, progressResult] = await Promise.all([
+        db.from('courses')
+          .select('id,title,description,instructor,created_at')
+          .eq('published', true)
+          .order('created_at', { ascending: false }),
+
+        db.from('enrollments')
+          .select('id,status,enrolled_at,course_id,courses(title,description)')
+          .eq('student_id', user.id)
+          .order('enrolled_at', { ascending: false }),
+
+        db.from('announcements')
+          .select('id,title,body,created_at')
+          .eq('published', true)
+          .order('created_at', { ascending: false }),
+
+        db.from('lesson_progress')
+          .select('id,completed')
+          .eq('student_id', user.id)
+      ]);
+
+      const results = [
+        ['الكورسات', coursesResult],
+        ['التسجيلات', enrollmentsResult],
+        ['الإعلانات', announcementsResult],
+        ['التقدم التعليمي', progressResult]
+      ];
+      const failed = results.filter(([, result]) => result.error);
+
+      if (failed.length) {
+        NGDPortal.show(
+          'global-status',
+          'تعذر تحميل بعض البيانات. راجع سياسات الوصول (RLS) والعلاقات في Supabase. التفاصيل: ' +
+            failed.map(([label, result]) => `${label}: ${result.error.message}`).join(' | '),
+          'error'
+        );
+      }
+
+      const courses = coursesResult.data || [];
+      const enrollments = enrollmentsResult.data || [];
+      const announcements = announcementsResult.data || [];
+      const progress = progressResult.data || [];
+
+      document.getElementById('course-count').textContent = `${courses.length} كورس`;
+
+      document.getElementById('courses').innerHTML = courses.length
+        ? courses.map(course => `
+            <article class="card">
+              <span class="pill">كورس منشور</span>
+              <h3>${esc(course.title)}</h3>
+              <p>${esc(course.description || 'لا يوجد وصف مضاف بعد.')}</p>
+              ${course.instructor ? `<p class="muted small">المدرب: ${esc(course.instructor)}</p>` : ''}
+            </article>`).join('')
+        : '<div class="empty">لا توجد كورسات منشورة حاليًا.</div>';
+
+      document.getElementById('enrollments').innerHTML = enrollments.length
+        ? enrollments.map(enrollment => `
+            <article class="item">
+              <div class="item-top">
+                <strong>${esc(enrollment.courses?.title || 'كورس')}</strong>
+                <span class="pill">${esc(enrollment.status || 'active')}</span>
+              </div>
+              <p class="muted small">تاريخ التسجيل: ${
+                enrollment.enrolled_at
+                  ? new Date(enrollment.enrolled_at).toLocaleDateString('ar-EG')
+                  : '—'
+              }</p>
+            </article>`).join('')
+        : '<div class="empty">لا توجد تسجيلات مرتبطة بحسابك حتى الآن. تواصل مع فريق الأكاديمية للتسجيل في الكورسات المتاحة.</div>';
+
+      document.getElementById('announcements').innerHTML = announcements.length
+        ? announcements.map(announcement => `
+            <article class="item">
+              <strong>${esc(announcement.title)}</strong>
+              <p>${esc(announcement.body)}</p>
+              <p class="muted small">${
+                announcement.created_at
+                  ? new Date(announcement.created_at).toLocaleDateString('ar-EG')
+                  : ''
+              }</p>
+            </article>`).join('')
+        : '<div class="empty">لا توجد إعلانات منشورة حاليًا.</div>';
+
+      const completed = progress.filter(item => item.completed).length;
+      document.getElementById('summary').innerHTML = `
+        <div class="item"><span class="muted small">الكورسات المسجل فيها</span><h3>${enrollments.length}</h3></div>
+        <div class="item"><span class="muted small">الدروس المكتملة المسجلة</span><h3>${completed}</h3></div>
+        <div class="item"><span class="muted small">إجمالي سجلات التقدم</span><h3>${progress.length}</h3></div>`;
+    })().catch(error => {
+      console.error(error);
+      if (window.NGDPortal) {
+        NGDPortal.show('global-status', 'حدث خطأ غير متوقع أثناء تحميل البوابة. أعد تحميل الصفحة، وإذا استمرت المشكلة راجع Console في المتصفح.', 'error');
+      }
+    });
+  </script>
+</body>
+</html>
