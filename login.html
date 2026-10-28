@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="تسجيل الدخول إلى بوابة NGD Academy">
+  <meta name="theme-color" content="#092342">
+  <title>تسجيل الدخول | NGD Academy</title>
+  <link rel="stylesheet" href="assets/site.css">
+  <link rel="stylesheet" href="assets/portal.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="config/supabase-config.js"></script>
+  <script src="assets/portal-common.js"></script>
+</head>
+<body>
+  <header class="portal-header">
+    <a class="brand" href="index.html" aria-label="العودة إلى NGD Academy">
+      <span class="brand-mark">NGD</span>
+      <span>
+        NGD ACADEMY
+        <small style="display:block;color:#aeb9c5;font-size:.72rem;font-weight:400">بوابة التعلم</small>
+      </span>
+    </a>
+    <nav class="portal-nav" aria-label="التنقل الرئيسي">
+      <a href="index.html">العودة للموقع</a>
+    </nav>
+  </header>
+
+  <main class="wrap" style="max-width:560px">
+    <section class="hero">
+      <div class="eyebrow">NGD ACADEMY PORTAL</div>
+      <h1>بوابتك للتعلّم تبدأ هنا</h1>
+      <p class="muted">سجّل الدخول لمتابعة كورساتك والإعلانات والتقدم التعليمي.</p>
+    </section>
+
+    <section class="card">
+      <h2>تسجيل الدخول</h2>
+      <p class="muted small">استخدم حساب Google الخاص بك. عند أول تسجيل دخول، سيتم إنشاء ملفك الشخصي تلقائيًا إذا كانت إعدادات قاعدة البيانات تسمح بذلك.</p>
+
+      <div id="global-status" class="status hidden" role="status" aria-live="polite"></div>
+
+      <button id="google-login" class="google-btn" type="button">
+        <svg class="google-icon" viewBox="0 0 48 48" aria-hidden="true">
+          <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 3.01 13.22l7.98 6.19C12.88 13.72 18.01 9.5 24 9.5z"/>
+          <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.74 7.18l7.65 5.94c4.47-4.13 7.13-10.2 7.13-17.59z"/>
+          <path fill="#FBBC05" d="M10.99 28.59A14.4 14.4 0 0 1 10.25 24c0-1.59.27-3.13.74-4.59l-7.98-6.19A23.9 23.9 0 0 0 0 24c0 3.88.93 7.55 3.01 10.78l7.98-6.19z"/>
+          <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.9-5.86l-7.65-5.94c-2.13 1.43-4.86 2.28-8.25 2.28-5.99 0-11.12-4.22-13.01-9.91l-7.98 6.19C6.51 43.62 14.62 48 24 48z"/>
+        </svg>
+        <span>المتابعة باستخدام Google</span>
+      </button>
+
+      <p class="muted small" style="margin-top:16px">
+        باستخدامك زر المتابعة، سيتم تحويلك إلى Google لإتمام تسجيل الدخول، ثم العودة إلى بوابة الطلاب.
+      </p>
+      <p class="muted small">
+        بالمتابعة، أنت توافق على <a href="privacy.html">سياسة الخصوصية</a>.
+      </p>
+    </section>
+  </main>
+
+  <footer class="footer">
+    © 2026 NGD Academy · <a href="mailto:ngd.academy@gmail.com">ngd.academy@gmail.com</a>
+  </footer>
+
+  <script>
+    (() => {
+      const btn = document.getElementById('google-login');
+
+      if (!window.NGDPortal || !NGDPortal.ready || !NGDPortal.client) {
+        btn.disabled = true;
+        if (window.NGDPortal) {
+          NGDPortal.show(
+            'global-status',
+            'إعداد الاتصال بقاعدة البيانات غير مكتمل. تأكد من وجود config/supabase-config.js ومن صحة رابط المشروع والمفتاح العام.',
+            'error'
+          );
+        } else {
+          const status = document.getElementById('global-status');
+          status.textContent = 'تعذر تحميل إعدادات البوابة. راجع ملفات الإعداد داخل المستودع.';
+          status.className = 'status error';
+        }
+        return;
+      }
+
+      btn.addEventListener('click', async () => {
+        btn.disabled = true;
+        btn.innerHTML = '<span>جارٍ تحويلك إلى Google…</span>';
+
+        const redirectTo = new URL('student.html', window.location.href).href;
+        const { error } = await NGDPortal.client.auth.signInWithOAuth({
+          provider: 'google',
+          options: {
+            redirectTo,
+            queryParams: { prompt: 'select_account' }
+          }
+        });
+
+        if (error) {
+          NGDPortal.show('global-status', 'تعذر بدء تسجيل الدخول: ' + error.message, 'error');
+          btn.disabled = false;
+          btn.innerHTML = '<span>المتابعة باستخدام Google</span>';
+        }
+      });
+
+      NGDPortal.client.auth.getSession().then(({ data, error }) => {
+        if (!error && data?.session) {
+          window.location.href = new URL('student.html', window.location.href).href;
+        }
+      });
+    })();
+  </script>
+</body>
+</html>
