@@ -1,0 +1,379 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="لوحة إدارة NGD Academy">
+  <meta name="theme-color" content="#092342">
+  <title>لوحة الإدارة | NGD Academy</title>
+  <link rel="stylesheet" href="assets/site.css">
+  <link rel="stylesheet" href="assets/portal.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="config/supabase-config.js"></script>
+  <script src="assets/portal-common.js"></script>
+</head>
+<body>
+  <header class="portal-header">
+    <a class="brand" href="index.html" aria-label="العودة إلى الموقع الرئيسي">
+      <span class="brand-mark">NGD</span>
+      <span>NGD ACADEMY<small style="display:block;color:#aeb9c5;font-size:.72rem;font-weight:400">لوحة الإدارة</small></span>
+    </a>
+    <nav class="portal-nav" aria-label="التنقل الرئيسي">
+      <a href="index.html">الموقع الرئيسي</a>
+      <a href="student.html">بوابة الطالب</a>
+      <button id="logout" type="button">تسجيل الخروج</button>
+    </nav>
+  </header>
+
+  <main class="wrap">
+    <section class="hero">
+      <div class="eyebrow">NGD ADMINISTRATION</div>
+      <h1>لوحة إدارة الأكاديمية</h1>
+      <p class="muted">إدارة الكورسات والدروس والإعلانات المنشورة في بوابة NGD Academy.</p>
+    </section>
+
+    <div id="global-status" class="status hidden" role="status" aria-live="polite"></div>
+
+    <section class="card">
+      <h2>إضافة كورس</h2>
+      <form id="course-form" class="portal-form">
+        <label for="course-title">اسم الكورس *</label>
+        <input id="course-title" name="title" required maxlength="160" placeholder="مثال: أساسيات البرمجة">
+
+        <label for="course-description">وصف الكورس</label>
+        <textarea id="course-description" name="description" rows="3" maxlength="3000" placeholder="اكتب وصفًا مختصرًا للكورس"></textarea>
+
+        <label for="course-instructor">اسم المدرب</label>
+        <input id="course-instructor" name="instructor" maxlength="160" placeholder="اسم المدرب">
+
+        <label class="check-row" for="course-published">
+          <input id="course-published" name="published" type="checkbox">
+          نشر الكورس فورًا
+        </label>
+
+        <button type="submit">إضافة الكورس</button>
+      </form>
+    </section>
+
+    <section class="card">
+      <h2>إضافة درس إلى كورس</h2>
+      <form id="lesson-form" class="portal-form">
+        <label for="lesson-course">الكورس *</label>
+        <select id="lesson-course" name="course_id" required>
+          <option value="">جارٍ تحميل الكورسات…</option>
+        </select>
+
+        <label for="lesson-title">اسم الدرس *</label>
+        <input id="lesson-title" name="title" required maxlength="200" placeholder="اسم الدرس">
+
+        <label for="lesson-url">رابط محتوى الدرس (اختياري)</label>
+        <input id="lesson-url" name="content_url" type="url" placeholder="https://...">
+
+        <label for="lesson-position">ترتيب الدرس *</label>
+        <input id="lesson-position" name="position" type="number" min="1" step="1" value="1" required>
+
+        <label class="check-row" for="lesson-published">
+          <input id="lesson-published" name="published" type="checkbox">
+          نشر الدرس
+        </label>
+
+        <button type="submit">إضافة الدرس</button>
+      </form>
+    </section>
+
+    <section class="card">
+      <h2>إضافة إعلان</h2>
+      <form id="announcement-form" class="portal-form">
+        <label for="announcement-title">عنوان الإعلان *</label>
+        <input id="announcement-title" name="title" required maxlength="200" placeholder="عنوان الإعلان">
+
+        <label for="announcement-body">نص الإعلان *</label>
+        <textarea id="announcement-body" name="body" required rows="4" maxlength="5000" placeholder="اكتب تفاصيل الإعلان"></textarea>
+
+        <label class="check-row" for="announcement-published">
+          <input id="announcement-published" name="published" type="checkbox">
+          نشر الإعلان فورًا
+        </label>
+
+        <button type="submit">إضافة الإعلان</button>
+      </form>
+    </section>
+
+    <section class="card">
+      <div class="section-title">
+        <h2>الكورسات الحالية</h2>
+        <button id="refresh" type="button" class="secondary-btn">تحديث القائمة</button>
+      </div>
+      <div id="course-list" class="list"><div class="empty">جارٍ تحميل الكورسات…</div></div>
+    </section>
+
+    <section class="card">
+      <h2>الإعلانات الحالية</h2>
+      <div id="announcement-list" class="list"><div class="empty">جارٍ تحميل الإعلانات…</div></div>
+    </section>
+  </main>
+
+  <footer class="footer">© 2026 NGD Academy · <a href="mailto:ngd.academy@gmail.com">ngd.academy@gmail.com</a></footer>
+
+  <script>
+    (() => {
+      const statusId = 'global-status';
+      const byId = id => document.getElementById(id);
+      let db = null;
+      let adminUser = null;
+
+      function setBusy(form, busy) {
+        form.querySelectorAll('button[type="submit"]').forEach(button => {
+          button.disabled = busy;
+        });
+      }
+
+      function formValues(form) {
+        return Object.fromEntries(new FormData(form).entries());
+      }
+
+      function publishedValue(form, fieldName) {
+        return Boolean(form.querySelector(`[name="${fieldName}"]`)?.checked);
+      }
+
+      async function ensureAdmin() {
+        if (!window.NGDPortal?.ready || !window.NGDPortal?.client) {
+          NGDPortal?.show(statusId, 'إعداد Supabase غير مكتمل. راجع config/supabase-config.js.', 'error');
+          return false;
+        }
+
+        const { data, error } = await NGDPortal.client.auth.getSession();
+        if (error || !data?.session?.user) {
+          window.location.href = 'login.html';
+          return false;
+        }
+
+        adminUser = data.session.user;
+        db = NGDPortal.client;
+
+        // This check improves the interface, but database RLS policies remain
+        // the actual security boundary for every insert/update/delete operation.
+        const { data: roleRow, error: roleError } = await db
+          .from('user_roles')
+          .select('role')
+          .eq('user_id', adminUser.id)
+          .maybeSingle();
+
+        if (roleError) {
+          NGDPortal.show(statusId, 'تعذر التحقق من صلاحية الحساب: ' + roleError.message, 'error');
+          return false;
+        }
+
+        if (roleRow?.role !== 'admin') {
+          NGDPortal.show(statusId, 'هذا الحساب ليس لديه صلاحية إدارة. سجّل الدخول بحساب المدير المعتمد.', 'error');
+          window.setTimeout(() => { window.location.href = 'student.html'; }, 1800);
+          return false;
+        }
+
+        return true;
+      }
+
+      async function loadCourses() {
+        const list = byId('course-list');
+        const selector = byId('lesson-course');
+        const { data, error } = await db
+          .from('courses')
+          .select('id,title,description,instructor,published,created_at')
+          .order('created_at', { ascending: false });
+
+        if (error) {
+          list.innerHTML = '<div class="empty">تعذر تحميل الكورسات.</div>';
+          NGDPortal.show(statusId, 'خطأ تحميل الكورسات: ' + error.message, 'error');
+          return;
+        }
+
+        const courses = data || [];
+        selector.innerHTML = '<option value="">اختر كورسًا</option>' +
+          courses.map(course => `<option value="${NGDPortal.esc(course.id)}">${NGDPortal.esc(course.title)}</option>`).join('');
+
+        list.innerHTML = courses.length ? courses.map(course => `
+          <article class="item">
+            <div class="item-top">
+              <strong>${NGDPortal.esc(course.title)}</strong>
+              <span class="pill">${course.published ? 'منشور' : 'مسودة'}</span>
+            </div>
+            <p>${NGDPortal.esc(course.description || 'لا يوجد وصف.')}</p>
+            ${course.instructor ? `<p class="muted small">المدرب: ${NGDPortal.esc(course.instructor)}</p>` : ''}
+            <div class="button-row">
+              <button type="button" class="secondary-btn toggle-course" data-id="${NGDPortal.esc(course.id)}" data-published="${course.published ? 'true' : 'false'}">
+                ${course.published ? 'إلغاء النشر' : 'نشر الكورس'}
+              </button>
+            </div>
+          </article>`).join('') : '<div class="empty">لم تتم إضافة كورسات حتى الآن.</div>';
+
+        list.querySelectorAll('.toggle-course').forEach(button => {
+          button.addEventListener('click', async () => {
+            const nextPublished = button.dataset.published !== 'true';
+            button.disabled = true;
+            const { error: updateError } = await db.from('courses')
+              .update({ published: nextPublished })
+              .eq('id', button.dataset.id);
+
+            if (updateError) {
+              NGDPortal.show(statusId, 'تعذر تحديث حالة الكورس: ' + updateError.message, 'error');
+              button.disabled = false;
+              return;
+            }
+            NGDPortal.show(statusId, nextPublished ? 'تم نشر الكورس.' : 'تم إلغاء نشر الكورس.', 'success');
+            await loadCourses();
+          });
+        });
+      }
+
+      async function loadAnnouncements() {
+        const list = byId('announcement-list');
+        const { data, error } = await db
+          .from('announcements')
+          .select('id,title,body,published,created_at')
+          .order('created_at', { ascending: false });
+
+        if (error) {
+          list.innerHTML = '<div class="empty">تعذر تحميل الإعلانات.</div>';
+          NGDPortal.show(statusId, 'خطأ تحميل الإعلانات: ' + error.message, 'error');
+          return;
+        }
+
+        const announcements = data || [];
+        list.innerHTML = announcements.length ? announcements.map(item => `
+          <article class="item">
+            <div class="item-top">
+              <strong>${NGDPortal.esc(item.title)}</strong>
+              <span class="pill">${item.published ? 'منشور' : 'مسودة'}</span>
+            </div>
+            <p>${NGDPortal.esc(item.body)}</p>
+            <button type="button" class="secondary-btn toggle-announcement" data-id="${NGDPortal.esc(item.id)}" data-published="${item.published ? 'true' : 'false'}">
+              ${item.published ? 'إلغاء النشر' : 'نشر الإعلان'}
+            </button>
+          </article>`).join('') : '<div class="empty">لا توجد إعلانات حتى الآن.</div>';
+
+        list.querySelectorAll('.toggle-announcement').forEach(button => {
+          button.addEventListener('click', async () => {
+            const nextPublished = button.dataset.published !== 'true';
+            button.disabled = true;
+            const { error: updateError } = await db.from('announcements')
+              .update({ published: nextPublished })
+              .eq('id', button.dataset.id);
+
+            if (updateError) {
+              NGDPortal.show(statusId, 'تعذر تحديث الإعلان: ' + updateError.message, 'error');
+              button.disabled = false;
+              return;
+            }
+            NGDPortal.show(statusId, nextPublished ? 'تم نشر الإعلان.' : 'تم إلغاء نشر الإعلان.', 'success');
+            await loadAnnouncements();
+          });
+        });
+      }
+
+      async function handleCourseSubmit(event) {
+        event.preventDefault();
+        const form = event.currentTarget;
+        const values = formValues(form);
+        setBusy(form, true);
+
+        const { error } = await db.from('courses').insert({
+          title: String(values.title || '').trim(),
+          description: String(values.description || '').trim() || null,
+          instructor: String(values.instructor || '').trim() || null,
+          published: publishedValue(form, 'published')
+        });
+
+        setBusy(form, false);
+        if (error) {
+          NGDPortal.show(statusId, 'تعذرت إضافة الكورس: ' + error.message, 'error');
+          return;
+        }
+
+        form.reset();
+        NGDPortal.show(statusId, 'تمت إضافة الكورس بنجاح.', 'success');
+        await loadCourses();
+      }
+
+      async function handleLessonSubmit(event) {
+        event.preventDefault();
+        const form = event.currentTarget;
+        const values = formValues(form);
+        const position = Number(values.position);
+
+        if (!values.course_id) {
+          NGDPortal.show(statusId, 'اختر الكورس أولًا.', 'error');
+          return;
+        }
+        if (!Number.isInteger(position) || position < 1) {
+          NGDPortal.show(statusId, 'ترتيب الدرس يجب أن يكون رقمًا صحيحًا يبدأ من 1.', 'error');
+          return;
+        }
+
+        setBusy(form, true);
+        const { error } = await db.from('lessons').insert({
+          course_id: values.course_id,
+          title: String(values.title || '').trim(),
+          content_url: String(values.content_url || '').trim() || null,
+          position,
+          published: publishedValue(form, 'published')
+        });
+        setBusy(form, false);
+
+        if (error) {
+          NGDPortal.show(statusId, 'تعذرت إضافة الدرس: ' + error.message, 'error');
+          return;
+        }
+
+        form.reset();
+        byId('lesson-position').value = '1';
+        NGDPortal.show(statusId, 'تمت إضافة الدرس بنجاح.', 'success');
+      }
+
+      async function handleAnnouncementSubmit(event) {
+        event.preventDefault();
+        const form = event.currentTarget;
+        const values = formValues(form);
+        setBusy(form, true);
+
+        const { error } = await db.from('announcements').insert({
+          title: String(values.title || '').trim(),
+          body: String(values.body || '').trim(),
+          published: publishedValue(form, 'published')
+        });
+
+        setBusy(form, false);
+        if (error) {
+          NGDPortal.show(statusId, 'تعذرت إضافة الإعلان: ' + error.message, 'error');
+          return;
+        }
+
+        form.reset();
+        NGDPortal.show(statusId, 'تمت إضافة الإعلان بنجاح.', 'success');
+        await loadAnnouncements();
+      }
+
+      async function start() {
+        const allowed = await ensureAdmin();
+        if (!allowed) return;
+
+        byId('logout').addEventListener('click', () => NGDPortal.signOut());
+        byId('course-form').addEventListener('submit', handleCourseSubmit);
+        byId('lesson-form').addEventListener('submit', handleLessonSubmit);
+        byId('announcement-form').addEventListener('submit', handleAnnouncementSubmit);
+        byId('refresh').addEventListener('click', async () => {
+          await Promise.all([loadCourses(), loadAnnouncements()]);
+        });
+
+        await Promise.all([loadCourses(), loadAnnouncements()]);
+      }
+
+      start().catch(error => {
+        console.error(error);
+        if (window.NGDPortal) {
+          NGDPortal.show(statusId, 'حدث خطأ غير متوقع في لوحة الإدارة. راجع إعدادات Supabase وسياسات الوصول.', 'error');
+        }
+      });
+    })();
+  </script>
+</body>
+</html>
