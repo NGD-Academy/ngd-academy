@@ -3,8 +3,7 @@
 <html lang="ar" dir="rtl">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="بوابة الطالب في NGD Academy">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="theme-color" content="#092342">
   <title>بوابة الطالب | NGD Academy</title>
 
@@ -14,609 +13,668 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="config/supabase-config.js"></script>
   <script src="assets/portal-common.js"></script>
-
-  <style>
-    .course-card {
-      display: flex;
-      flex-direction: column;
-      align-items: stretch;
-      gap: 12px;
-    }
-
-    .course-card .course-description {
-      line-height: 1.9;
-      margin: 0;
-    }
-
-    .course-card .course-actions {
-      margin-top: auto;
-      padding-top: 8px;
-    }
-
-    .course-card .btn,
-    .lesson-card .btn {
-      display: inline-flex;
-      justify-content: center;
-      align-items: center;
-      text-decoration: none;
-      cursor: pointer;
-    }
-
-    .course-card .btn:disabled {
-      opacity: .65;
-      cursor: wait;
-    }
-
-    .course-details {
-      margin-top: 24px;
-      scroll-margin-top: 24px;
-    }
-
-    .course-details-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      gap: 16px;
-      flex-wrap: wrap;
-      margin-bottom: 20px;
-    }
-
-    .course-details-header h2 {
-      margin-top: 0;
-      margin-bottom: 8px;
-    }
-
-    .course-details-description {
-      line-height: 1.9;
-      white-space: pre-wrap;
-    }
-
-    .lesson-card {
-      padding: 18px;
-      border: 1px solid #e7dfd1;
-      border-radius: 14px;
-      background: #fff;
-      margin-bottom: 12px;
-    }
-
-    .lesson-card:last-child {
-      margin-bottom: 0;
-    }
-
-    .lesson-card h3 {
-      margin: 0 0 14px;
-      font-size: 1.05rem;
-    }
-
-    .lesson-number {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      min-width: 30px;
-      height: 30px;
-      border-radius: 50%;
-      margin-left: 8px;
-      background: #f5efe3;
-      color: #092342;
-      font-size: .85rem;
-    }
-
-    .lesson-actions {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-    }
-
-    .course-details .empty {
-      line-height: 1.9;
-    }
-
-    .course-close {
-      border: 1px solid #d8d0c3;
-      background: transparent;
-      color: #092342;
-      border-radius: 9px;
-      padding: 9px 14px;
-      cursor: pointer;
-      font: inherit;
-    }
-
-    .course-close:hover {
-      background: #f9f7f1;
-    }
-
-    .lesson-loading {
-      padding: 18px;
-      color: #707a84;
-      text-align: center;
-    }
-
-    .lesson-error {
-      color: #b42318;
-      line-height: 1.9;
-      overflow-wrap: anywhere;
-    }
-
-    .hidden {
-      display: none !important;
-    }
-  </style>
 </head>
 
 <body>
-  <header class="portal-header">
-    <a class="brand" href="index.html" aria-label="العودة إلى الموقع الرئيسي">
-      <span class="brand-mark">NGD</span>
-      <span>
-        NGD ACADEMY
-        <small style="display:block;color:#aeb9c5;font-size:.72rem;font-weight:400">
-          بوابة الطالب
-        </small>
-      </span>
-    </a>
+<header class="portal-header">
+  <a class="brand" href="index.html">
+    <span class="brand-mark">NGD</span>
+    <span>NGD ACADEMY
+      <small style="display:block;color:#aeb9c5;font-size:.72rem;font-weight:400">
+        بوابة الطالب
+      </small>
+    </span>
+  </a>
 
-    <nav class="portal-nav" aria-label="التنقل الرئيسي">
-      <a href="index.html">الموقع الرئيسي</a>
-      <a href="admin.html" id="admin-link" class="hidden">لوحة الإدارة</a>
-      <button id="logout" type="button">تسجيل الخروج</button>
-    </nav>
-  </header>
+  <nav class="portal-nav">
+    <a href="index.html">الموقع الرئيسي</a>
+    <a href="programs.html">الكورسات العامة</a>
+    <a href="admin.html" id="admin-link" class="hidden">لوحة الإدارة</a>
+    <button id="logout" type="button">تسجيل الخروج</button>
+  </nav>
+</header>
 
-  <main class="wrap">
-    <div
-      id="global-status"
-      class="status hidden"
-      role="status"
-      aria-live="polite">
-    </div>
+<main class="wrap">
+  <div id="global-status" class="status hidden" role="status" aria-live="polite"></div>
 
-    <section class="hero">
-      <div class="eyebrow">STUDENT SPACE</div>
-      <h1 id="welcome">أهلًا بك في بوابة الطالب</h1>
-      <p class="muted">
-        تابع الكورسات والدروس والإعلانات وتقدمك التعليمي من مكان واحد.
-      </p>
+  <section class="hero">
+    <div class="eyebrow">STUDENT SPACE</div>
+    <h1 id="welcome">أهلًا بك في بوابة الطالب</h1>
+    <p class="muted">
+      اكتشف الكورسات، أضف ما يناسبك إلى قائمتك، وتابع تعلّمك من مكان واحد.
+    </p>
+  </section>
+
+  <div class="grid">
+    <section class="card">
+      <h2>ملفي الشخصي</h2>
+      <div id="profile" class="muted">جارٍ تحميل بياناتك…</div>
     </section>
 
-    <div class="grid">
-      <section class="card">
-        <h2>ملفي الشخصي</h2>
-        <div id="profile" class="muted">جارٍ تحميل بياناتك…</div>
-      </section>
-
-      <section class="card">
-        <h2>ملخص التعلم</h2>
-        <div id="summary" class="list">
-          <div class="empty">جارٍ تحميل بيانات التعلم…</div>
-        </div>
-      </section>
-    </div>
-
-    <div class="section-title">
-      <h2>الكورسات المنشورة</h2>
-      <span id="course-count" class="pill">—</span>
-    </div>
-
-    <div id="courses" class="grid">
-      <div class="empty">جارٍ تحميل الكورسات…</div>
-    </div>
-
-    <section
-      id="course-details"
-      class="card course-details hidden"
-      aria-live="polite">
+    <section class="card">
+      <h2>ملخص التعلّم</h2>
+      <div id="summary" class="list">
+        <div class="empty">جارٍ تحميل البيانات…</div>
+      </div>
     </section>
+  </div>
 
-    <div class="section-title">
-      <h2>تسجيلاتي</h2>
-      <span class="muted small">الكورسات المرتبطة بحسابك</span>
-    </div>
+  <!-- Public courses from Google Sheets -->
+  <div class="section-title">
+    <h2>الكورسات المتاحة</h2>
+    <span id="public-course-count" class="pill">—</span>
+  </div>
 
-    <div id="enrollments" class="list">
-      <div class="empty">جارٍ تحميل التسجيلات…</div>
-    </div>
+  <p class="muted small">
+    الكورسات دي مصدرها كتالوج الأكاديمية العام. إضافة كورس إلى قائمتك
+    لا تعني بالضرورة أن دروسه متاحة داخل البوابة.
+  </p>
 
-    <div class="section-title">
-      <h2>الإعلانات</h2>
-    </div>
+  <div id="public-courses" class="grid">
+    <div class="empty">جارٍ تحميل الكورسات…</div>
+  </div>
 
-    <div id="announcements" class="list">
-      <div class="empty">جارٍ تحميل الإعلانات…</div>
-    </div>
-  </main>
+  <!-- Student's saved public courses -->
+  <div class="section-title">
+    <h2>كورساتي</h2>
+    <span id="my-course-count" class="pill">—</span>
+  </div>
 
-  <footer class="footer">
-    © 2026 NGD Academy ·
-    <a href="mailto:ngd.academy@gmail.com">ngd.academy@gmail.com</a>
-  </footer>
+  <div id="my-public-courses" class="grid">
+    <div class="empty">جارٍ تحميل قائمتك…</div>
+  </div>
 
-  <script>
-    (async () => {
-      const portal = window.NGDPortal;
-      const db = portal?.client;
+  <!-- Internal Supabase courses -->
+  <div class="section-title">
+    <h2>كورسات البوابة الداخلية</h2>
+    <span id="internal-course-count" class="pill">—</span>
+  </div>
 
-      if (!portal || !db) {
-        throw new Error(
-          'تعذر الاتصال بإعدادات البوابة. راجع ملفات Supabase.'
-        );
+  <div id="courses" class="grid">
+    <div class="empty">جارٍ تحميل الكورسات…</div>
+  </div>
+
+  <div class="section-title">
+    <h2>تسجيلاتي الداخلية</h2>
+    <span class="muted small">الكورسات المرتبطة بحسابك داخل البوابة</span>
+  </div>
+
+  <div id="enrollments" class="list">
+    <div class="empty">جارٍ التحميل…</div>
+  </div>
+
+  <div class="section-title">
+    <h2>الإعلانات</h2>
+  </div>
+
+  <div id="announcements" class="list">
+    <div class="empty">جارٍ تحميل الإعلانات…</div>
+  </div>
+</main>
+
+<footer class="footer">© 2026 NGD Academy</footer>
+
+<script>
+(async () => {
+  const user = await NGDPortal.requireUser();
+  if (!user) return;
+
+  const db = NGDPortal.client;
+  const esc = NGDPortal.esc;
+
+  const API_URL =
+    "https://script.google.com/macros/s/AKfycbxjhlwCmegcjdANbBed2yNxRavn_1PfjTIeZKKVc0msk4g1xD16uLZlZdGuVoOnCQs/exec";
+
+  const statusBox = document.getElementById("global-status");
+
+  function showMessage(message, type = "error") {
+    NGDPortal.show("global-status", message, type);
+  }
+
+  function safeUrl(value) {
+    if (!value) return "";
+
+    try {
+      const url = new URL(String(value).trim());
+
+      if (url.protocol === "https:" || url.protocol === "http:") {
+        return url.href;
       }
+    } catch (_) {}
 
-      const logoutButton = document.getElementById('logout');
+    return "";
+  }
 
-      logoutButton.addEventListener('click', () => portal.signOut());
+  function normalizeMode(course) {
+    const mode = String(course.enrollment_mode || "")
+      .trim()
+      .toLowerCase();
 
-      const user = await portal.requireUser();
-      if (!user) return;
+    if (["portal", "external", "both"].includes(mode)) {
+      return mode;
+    }
 
-      const esc = portal.esc;
+    // Compatibility for old rows that do not have enrollment_mode.
+    return safeUrl(course.registration_url ||
+      course.registration_link || course.url)
+      ? "both"
+      : "portal";
+  }
 
-      const showStatus = (message, type = 'error') => {
-        portal.show('global-status', message, type);
-      };
+  function normalizeCourse(course) {
+    const registrationUrl = safeUrl(
+      course.registration_url ||
+      course.registration_link ||
+      course.url
+    );
 
-      const displayName =
-        user.user_metadata?.full_name ||
-        user.user_metadata?.name ||
-        user.email ||
-        'طالب NGD';
+    const archiveUrl = safeUrl(
+      course.archive_url ||
+      course.recordings_url ||
+      course.telegram_url
+    );
 
-      document.getElementById('welcome').textContent =
-        `أهلًا، ${displayName}`;
+    return {
+      id: String(course.course_id || "").trim(),
+      title: String(course.title || course.course_name || "كورس بدون اسم"),
+      category: String(
+        course.category ||
+        course.track ||
+        course.path ||
+        course.category_name ||
+        ""
+      ),
+      description: String(course.description || ""),
+      status: String(course.status || ""),
+      instructor: String(course.instructor || ""),
+      imageUrl: safeUrl(course.image_url),
+      registrationUrl,
+      archiveUrl,
+      mode: normalizeMode({
+        ...course,
+        registration_url: registrationUrl
+      })
+    };
+  }
 
-      const avatarUrl =
-        user.user_metadata?.avatar_url ||
-        user.user_metadata?.picture ||
-        '';
+  function courseStatusLabel(status) {
+    const labels = {
+      "Open": "التسجيل مفتوح",
+      "Coming Soon": "قريبًا",
+      "Completed": "مكتمل",
+      "Closed": "التسجيل مغلق",
+      "Draft": "مسودة"
+    };
 
-      document.getElementById('profile').innerHTML = `
-        <div class="userline">
-          ${
-            avatarUrl
-              ? `<img class="avatar" src="${esc(avatarUrl)}" alt="">`
-              : ''
-          }
+    return labels[status] || status || "متاح";
+  }
 
-          <div>
-            <strong>${esc(displayName)}</strong>
-            <div class="muted small">${esc(user.email || '')}</div>
-            <div class="muted small">
-              معرّف الحساب: ${esc(user.id.slice(0, 8))}…
-            </div>
-          </div>
+  function externalRegistrationButton(course) {
+    const canRegister =
+      ["Open", "Coming Soon"].includes(course.status);
+
+    if (
+      course.mode === "portal" ||
+      !course.registrationUrl ||
+      !canRegister
+    ) {
+      return "";
+    }
+
+    const label = course.status === "Open"
+      ? "التسجيل في الكورس"
+      : "تفاصيل التسجيل";
+
+    return `
+      <a class="btn secondary"
+         href="${esc(course.registrationUrl)}"
+         target="_blank"
+         rel="noopener noreferrer">
+        ${label}
+      </a>`;
+  }
+
+  function archiveButton(course) {
+    if (!course.archiveUrl || course.status !== "Completed") {
+      return "";
+    }
+
+    return `
+      <a class="btn secondary"
+         href="${esc(course.archiveUrl)}"
+         target="_blank"
+         rel="noopener noreferrer">
+        شاهد التسجيلات
+      </a>`;
+  }
+
+  function publicCourseCard(course, savedIds) {
+    const saved = savedIds.has(course.id);
+    const canAdd = course.mode !== "external" && Boolean(course.id);
+
+    const addButton = canAdd
+      ? saved
+        ? `<button class="btn secondary" type="button" disabled>
+             تمت الإضافة إلى كورساتي
+           </button>`
+        : `<button class="btn"
+                   type="button"
+                   data-action="add"
+                   data-course-id="${esc(course.id)}">
+             أضف إلى كورساتي
+           </button>`
+      : "";
+
+    const image = course.imageUrl
+      ? `<img src="${esc(course.imageUrl)}"
+              alt=""
+              loading="lazy"
+              style="width:100%;max-height:190px;object-fit:cover;border-radius:10px">`
+      : "";
+
+    return `
+      <article class="card">
+        ${image}
+        <span class="pill">${esc(courseStatusLabel(course.status))}</span>
+        <h3>${esc(course.title)}</h3>
+        ${course.category
+          ? `<p class="muted small">${esc(course.category)}</p>`
+          : ""}
+        <p>${esc(course.description || "لا يوجد وصف مضاف لهذا الكورس بعد.")}</p>
+        ${course.instructor
+          ? `<p class="muted small">المدرب: ${esc(course.instructor)}</p>`
+          : ""}
+        <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:12px">
+          ${addButton}
+          ${externalRegistrationButton(course)}
+          ${archiveButton(course)}
         </div>
-      `;
+      </article>`;
+  }
 
-      // التحقق من دور المستخدم
-      const roleResult = await db
-        .from('user_roles')
-        .select('role')
-        .eq('user_id', user.id)
-        .maybeSingle();
+  // Profile
+  const name =
+    user.user_metadata?.full_name ||
+    user.user_metadata?.name ||
+    user.email ||
+    "طالب NGD";
 
-      if (roleResult.error) {
-        console.warn(
-          'Could not read user role:',
-          roleResult.error.message
-        );
-      } else if (roleResult.data?.role === 'admin') {
-        document.getElementById('admin-link')
-          .classList.remove('hidden');
-      }
+  document.getElementById("welcome").textContent = "أهلًا، " + name;
 
-      // تحميل بيانات البوابة
-      const [
-        coursesResult,
-        enrollmentsResult,
-        announcementsResult,
-        progressResult
-      ] = await Promise.all([
-        db.from('courses')
-          .select('id,title,description,instructor,created_at')
-          .eq('published', true)
-          .order('created_at', { ascending: false }),
+  document.getElementById("profile").innerHTML = `
+    <div class="userline">
+      ${user.user_metadata?.avatar_url
+        ? `<img class="avatar"
+                src="${esc(user.user_metadata.avatar_url)}"
+                alt="">`
+        : ""}
+      <div>
+        <strong>${esc(name)}</strong>
+        <div class="muted small">${esc(user.email || "")}</div>
+        <div class="muted small">
+          معرّف الحساب: ${esc(user.id.slice(0, 8))}…
+        </div>
+      </div>
+    </div>`;
 
-        db.from('enrollments')
-          .select(
-            'id,status,enrolled_at,course_id,courses(title,description)'
-          )
-          .eq('student_id', user.id)
-          .order('enrolled_at', { ascending: false }),
+  document.getElementById("logout").addEventListener(
+    "click",
+    () => NGDPortal.signOut()
+  );
 
-        db.from('announcements')
-          .select('id,title,body,created_at')
-          .eq('published', true)
-          .order('created_at', { ascending: false }),
+  // Admin role
+  const roleRes = await db
+    .from("user_roles")
+    .select("role")
+    .eq("user_id", user.id)
+    .maybeSingle();
 
-        db.from('lesson_progress')
-          .select('id,completed')
-          .eq('student_id', user.id)
-      ]);
+  if (roleRes.data?.role === "admin") {
+    document.getElementById("admin-link").classList.remove("hidden");
+  }
 
-      const results = [
-        ['الكورسات', coursesResult],
-        ['التسجيلات', enrollmentsResult],
-        ['الإعلانات', announcementsResult],
-        ['التقدم التعليمي', progressResult]
-      ];
+  // Load internal portal data and saved public courses.
+  const [
+    coursesRes,
+    enrollRes,
+    annRes,
+    progressRes,
+    savedRes
+  ] = await Promise.all([
+    db.from("courses")
+      .select("id,title,description,instructor,created_at")
+      .eq("published", true)
+      .order("created_at", { ascending: false }),
 
-      const failed = results.filter(
-        ([, result]) => result.error
+    db.from("enrollments")
+      .select("id,status,enrolled_at,course_id,courses(title,description)")
+      .eq("student_id", user.id)
+      .order("enrolled_at", { ascending: false }),
+
+    db.from("announcements")
+      .select("id,title,body,created_at")
+      .eq("published", true)
+      .order("created_at", { ascending: false }),
+
+    db.from("lesson_progress")
+      .select("id,completed")
+      .eq("student_id", user.id),
+
+    db.from("external_course_enrollments")
+      .select("course_id,course_title,course_category,course_description,course_status,registration_url,archive_url,enrollment_mode,created_at")
+      .eq("user_id", user.id)
+      .order("created_at", { ascending: false })
+  ]);
+
+  const errors = [
+    coursesRes,
+    enrollRes,
+    annRes,
+    progressRes,
+    savedRes
+  ].filter(result => result.error);
+
+  if (errors.length) {
+    console.error("Portal loading errors:", errors.map(x => x.error));
+
+    const savedError = savedRes.error;
+
+    if (savedError) {
+      showMessage(
+        "تعذر تحميل كورساتك المحفوظة من Supabase. تأكد من إنشاء جدول external_course_enrollments وتشغيل سياسات الصلاحيات.",
+        "error"
+      );
+    } else {
+      showMessage(
+        "بعض بيانات البوابة لم تُحمّل. راجع إعدادات قاعدة البيانات.",
+        "error"
+      );
+    }
+  }
+
+  const internalCourses = coursesRes.data || [];
+  const internalEnrollments = enrollRes.data || [];
+  const announcements = annRes.data || [];
+  const progress = progressRes.data || [];
+  const savedCourses = savedRes.data || [];
+
+  const savedIds = new Set(
+    savedCourses.map(course => String(course.course_id))
+  );
+
+  // Public Google Sheets catalog
+  let publicCourses = [];
+
+  try {
+    const response = await fetch(API_URL);
+
+    if (!response.ok) {
+      throw new Error("HTTP " + response.status);
+    }
+
+    const data = await response.json();
+
+    if (data.success !== true || !Array.isArray(data.courses)) {
+      throw new Error("استجابة الكتالوج غير متوقعة");
+    }
+
+    publicCourses = data.courses
+      .map(normalizeCourse)
+      .filter(course =>
+        ["Open", "Coming Soon", "Completed"].includes(course.status)
       );
 
-      if (failed.length) {
-        showStatus(
-          'تعذر تحميل بعض البيانات: ' +
-          failed.map(
-            ([label, result]) =>
-              `${label}: ${result.error.message}`
-          ).join(' | ')
-        );
-      }
+    document.getElementById("public-course-count").textContent =
+      publicCourses.length + " كورس";
 
-      const courses = coursesResult.data || [];
-      const enrollments = enrollmentsResult.data || [];
-      const announcements = announcementsResult.data || [];
-      const progress = progressResult.data || [];
+    document.getElementById("public-courses").innerHTML =
+      publicCourses.length
+        ? publicCourses.map(course =>
+            publicCourseCard(course, savedIds)
+          ).join("")
+        : `<div class="empty">لا توجد كورسات متاحة حاليًا.</div>`;
 
-      document.getElementById('course-count').textContent =
-        `${courses.length} كورس`;
+  } catch (error) {
+    console.error("Public catalog error:", error);
 
-      const coursesBox = document.getElementById('courses');
-      const detailsBox = document.getElementById('course-details');
+    document.getElementById("public-course-count").textContent = "—";
+    document.getElementById("public-courses").innerHTML = `
+      <div class="empty">
+        تعذر تحميل الكورسات العامة. حاول تحديث الصفحة لاحقًا.
+        <p><a href="programs.html">افتح صفحة الكورسات العامة</a></p>
+      </div>`;
+  }
 
-      // عرض الكورسات وإضافة زر لفتح كل كورس
-      coursesBox.innerHTML = courses.length
-        ? courses.map(course => `
-            <article class="card course-card">
-              <div>
-                <span class="pill">كورس منشور</span>
-                <h3>${esc(course.title)}</h3>
-                <p class="course-description">
-                  ${esc(course.description || 'لا يوجد وصف مضاف بعد.')}
-                </p>
+  function renderSavedCourses() {
+    document.getElementById("my-course-count").textContent =
+      savedCourses.length + " كورس";
 
-                ${
-                  course.instructor
-                    ? `<p class="muted small">
-                         المدرب: ${esc(course.instructor)}
-                       </p>`
-                    : ''
-                }
-              </div>
-
-              <div class="course-actions">
-                <button
-                  class="btn"
-                  type="button"
-                  data-open-course="${esc(course.id)}">
-                  عرض الكورس والدروس
+    document.getElementById("my-public-courses").innerHTML =
+      savedCourses.length
+        ? savedCourses.map(course => `
+            <article class="card">
+              <span class="pill">في كورساتي</span>
+              <h3>${esc(course.course_title)}</h3>
+              ${course.course_category
+                ? `<p class="muted small">${esc(course.course_category)}</p>`
+                : ""}
+              <p>${esc(course.course_description || "لا يوجد وصف متاح.")}</p>
+              <p class="muted small">
+                حالة الكورس: ${esc(courseStatusLabel(course.course_status))}
+              </p>
+              <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:12px">
+                ${course.registration_url &&
+                  ["Open", "Coming Soon"].includes(course.course_status)
+                  ? `<a class="btn secondary"
+                        href="${esc(safeUrl(course.registration_url))}"
+                        target="_blank"
+                        rel="noopener noreferrer">
+                       التسجيل في الكورس
+                     </a>`
+                  : ""}
+                ${course.archive_url &&
+                  course.course_status === "Completed"
+                  ? `<a class="btn secondary"
+                        href="${esc(safeUrl(course.archive_url))}"
+                        target="_blank"
+                        rel="noopener noreferrer">
+                       شاهد التسجيلات
+                     </a>`
+                  : ""}
+                <button class="btn secondary"
+                        type="button"
+                        data-action="remove"
+                        data-course-id="${esc(course.course_id)}">
+                  إزالة من كورساتي
                 </button>
               </div>
-            </article>
-          `).join('')
-        : '<div class="empty">لا توجد كورسات منشورة حاليًا.</div>';
+            </article>`
+          ).join("")
+        : `<div class="empty">
+             لسه ماضفتش كورسات. اختار أي كورس من القائمة فوق واضغط «أضف إلى كورساتي».
+           </div>`;
 
-      // فتح تفاصيل الكورس وجلب الدروس المنشورة
-      coursesBox.addEventListener('click', async event => {
-        const button = event.target.closest('[data-open-course]');
-        if (!button) return;
+    // Refresh saved state on catalog cards.
+    document.getElementById("public-courses").innerHTML =
+      publicCourses.length
+        ? publicCourses.map(course =>
+            publicCourseCard(course, savedIds)
+          ).join("")
+        : document.getElementById("public-courses").innerHTML;
+  }
 
-        const courseId = button.dataset.openCourse;
-        const course = courses.find(item => item.id === courseId);
+  renderSavedCourses();
 
-        if (!course) return;
+  // Add/remove actions
+  document.addEventListener("click", async event => {
+    const button = event.target.closest("button[data-action]");
+    if (!button) return;
 
-        button.disabled = true;
-        button.textContent = 'جارٍ تحميل الدروس…';
+    const action = button.dataset.action;
+    const courseId = button.dataset.courseId;
 
-        detailsBox.classList.remove('hidden');
+    if (!courseId) {
+      showMessage("هذا الكورس لا يحتوي على course_id صحيح في Google Sheets.");
+      return;
+    }
 
-        detailsBox.innerHTML = `
-          <div class="lesson-loading">
-            جارٍ تحميل دروس ${esc(course.title)}…
-          </div>
-        `;
+    button.disabled = true;
 
-        detailsBox.scrollIntoView({
-          behavior: 'smooth',
-          block: 'start'
-        });
+    try {
+      if (action === "add") {
+        if (savedIds.has(courseId)) return;
 
-        try {
-          const lessonsResult = await db
-            .from('lessons')
-            .select('id,title,content_url,position')
-            .eq('course_id', course.id)
-            .eq('published', true)
-            .order('position', { ascending: true });
+        const course = publicCourses.find(item => item.id === courseId);
 
-          if (lessonsResult.error) {
-            throw lessonsResult.error;
-          }
-
-          const lessons = lessonsResult.data || [];
-
-          detailsBox.innerHTML = `
-            <div class="course-details-header">
-              <div>
-                <span class="pill">محتوى الكورس</span>
-                <h2>${esc(course.title)}</h2>
-                ${
-                  course.instructor
-                    ? `<p class="muted small">
-                         المدرب: ${esc(course.instructor)}
-                       </p>`
-                    : ''
-                }
-              </div>
-
-              <button
-                type="button"
-                class="course-close"
-                id="close-course-details">
-                إغلاق التفاصيل
-              </button>
-            </div>
-
-            ${
-              course.description
-                ? `<p class="course-details-description">
-                     ${esc(course.description)}
-                   </p>`
-                : ''
-            }
-
-            <div class="section-title">
-              <h3>دروس الكورس</h3>
-              <span class="pill">${lessons.length} درس</span>
-            </div>
-
-            <div id="course-lessons-list">
-              ${
-                lessons.length
-                  ? lessons.map((lesson, index) => `
-                      <article class="lesson-card">
-                        <h3>
-                          <span class="lesson-number">
-                            ${index + 1}
-                          </span>
-                          ${esc(lesson.title)}
-                        </h3>
-
-                        <div class="lesson-actions">
-                          ${
-                            lesson.content_url
-                              ? `<a
-                                   class="btn"
-                                   href="${esc(lesson.content_url)}"
-                                   target="_blank"
-                                   rel="noopener noreferrer">
-                                   فتح الدرس
-                                 </a>`
-                              : `<span class="muted small">
-                                   لم يُضف رابط محتوى لهذا الدرس بعد.
-                                 </span>`
-                          }
-                        </div>
-                      </article>
-                    `).join('')
-                  : `<div class="empty">
-                       لا توجد دروس منشورة في هذا الكورس حاليًا.
-                       يُرجى التأكد من نشر الدروس من لوحة الإدارة.
-                     </div>`
-              }
-            </div>
-          `;
-
-          document.getElementById('close-course-details')
-            .addEventListener('click', () => {
-              detailsBox.classList.add('hidden');
-            });
-
-        } catch (error) {
-          console.error('Failed to load course lessons:', error);
-
-          detailsBox.innerHTML = `
-            <h2>${esc(course.title)}</h2>
-            <p class="lesson-error">
-              تعذر تحميل الدروس.
-              ${esc(error.message || 'حدث خطأ غير معروف.')}
-            </p>
-            <p class="muted small">
-              إذا استمرت المشكلة، راجع سياسات القراءة لجدول lessons
-              في إعدادات Supabase.
-            </p>
-          `;
-        } finally {
-          button.disabled = false;
-          button.textContent = 'عرض الكورس والدروس';
+        if (!course) {
+          throw new Error("لم يتم العثور على بيانات الكورس.");
         }
-      });
 
-      // تسجيلات الطالب
-      document.getElementById('enrollments').innerHTML =
-        enrollments.length
-          ? enrollments.map(enrollment => `
-              <article class="item">
-                <div class="item-top">
-                  <strong>
-                    ${esc(enrollment.courses?.title || 'كورس')}
-                  </strong>
-                  <span class="pill">
-                    ${esc(enrollment.status || 'active')}
-                  </span>
-                </div>
+        const { error } = await db
+          .from("external_course_enrollments")
+          .insert({
+            user_id: user.id,
+            course_id: course.id,
+            course_title: course.title,
+            course_category: course.category || null,
+            course_description: course.description || null,
+            course_status: course.status || null,
+            registration_url: course.registrationUrl || null,
+            archive_url: course.archiveUrl || null,
+            enrollment_mode: course.mode
+          });
 
-                <p class="muted small">
-                  تاريخ التسجيل:
-                  ${
-                    enrollment.enrolled_at
-                      ? new Date(
-                          enrollment.enrolled_at
-                        ).toLocaleDateString('ar-EG')
-                      : '—'
-                  }
-                </p>
-              </article>
-            `).join('')
-          : `<div class="empty">
-               لا توجد تسجيلات مرتبطة بحسابك حتى الآن.
-               تواصل مع فريق الأكاديمية للتسجيل في الكورسات المتاحة.
-             </div>`;
+        if (error) {
+          if (error.code === "23505") {
+            showMessage("الكورس موجود بالفعل في كورساتك.", "success");
+          } else {
+            throw error;
+          }
+        } else {
+          savedCourses.unshift({
+            course_id: course.id,
+            course_title: course.title,
+            course_category: course.category,
+            course_description: course.description,
+            course_status: course.status,
+            registration_url: course.registrationUrl,
+            archive_url: course.archiveUrl,
+            enrollment_mode: course.mode,
+            created_at: new Date().toISOString()
+          });
 
-      // الإعلانات
-      document.getElementById('announcements').innerHTML =
-        announcements.length
-          ? announcements.map(announcement => `
-              <article class="item">
-                <strong>${esc(announcement.title)}</strong>
-                <p>${esc(announcement.body)}</p>
-                <p class="muted small">
-                  ${
-                    announcement.created_at
-                      ? new Date(
-                          announcement.created_at
-                        ).toLocaleDateString('ar-EG')
-                      : ''
-                  }
-                </p>
-              </article>
-            `).join('')
-          : '<div class="empty">لا توجد إعلانات منشورة حاليًا.</div>';
+          savedIds.add(course.id);
+          showMessage("تمت إضافة الكورس إلى كورساتك بنجاح.", "success");
+        }
 
-      // ملخص التعلم
-      const completed = progress.filter(
-        item => item.completed
-      ).length;
+      } else if (action === "remove") {
+        const { error } = await db
+          .from("external_course_enrollments")
+          .delete()
+          .eq("user_id", user.id)
+          .eq("course_id", courseId);
 
-      document.getElementById('summary').innerHTML = `
-        <div class="item">
-          <span class="muted small">الكورسات المسجل فيها</span>
-          <h3>${enrollments.length}</h3>
-        </div>
+        if (error) throw error;
 
-        <div class="item">
-          <span class="muted small">الدروس المكتملة المسجلة</span>
-          <h3>${completed}</h3>
-        </div>
-
-        <div class="item">
-          <span class="muted small">إجمالي سجلات التقدم</span>
-          <h3>${progress.length}</h3>
-        </div>
-      `;
-    })().catch(error => {
-      console.error(error);
-
-      if (window.NGDPortal) {
-        NGDPortal.show(
-          'global-status',
-          'حدث خطأ غير متوقع أثناء تحميل البوابة: ' +
-            (error.message || 'خطأ غير معروف'),
-          'error'
+        const index = savedCourses.findIndex(
+          course => String(course.course_id) === courseId
         );
+
+        if (index !== -1) savedCourses.splice(index, 1);
+
+        savedIds.delete(courseId);
+        showMessage("تمت إزالة الكورس من قائمتك.", "success");
       }
-    });
-  </script>
+
+      renderSavedCourses();
+
+    } catch (error) {
+      console.error("Course selection error:", error);
+      showMessage(
+        "لم نتمكن من تنفيذ العملية. تأكد من اتصال قاعدة البيانات وصلاحيات الجدول.",
+        "error"
+      );
+    } finally {
+      button.disabled = false;
+    }
+  });
+
+  // Internal courses
+  document.getElementById("internal-course-count").textContent =
+    internalCourses.length + " كورس";
+
+  document.getElementById("courses").innerHTML =
+    internalCourses.length
+      ? internalCourses.map(course => `
+          <article class="card">
+            <span class="pill">كورس داخلي</span>
+            <h3>${esc(course.title)}</h3>
+            <p>${esc(course.description || "لا يوجد وصف مضاف بعد.")}</p>
+            ${course.instructor
+              ? `<p class="muted small">المدرب: ${esc(course.instructor)}</p>`
+              : ""}
+          </article>`
+        ).join("")
+      : `<div class="empty">لا توجد كورسات داخلية منشورة حاليًا.</div>`;
+
+  // Existing internal enrollments
+  document.getElementById("enrollments").innerHTML =
+    internalEnrollments.length
+      ? internalEnrollments.map(enrollment => `
+          <article class="item">
+            <div class="item-top">
+              <strong>${esc(enrollment.courses?.title || "كورس")}</strong>
+              <span class="pill">${esc(enrollment.status || "active")}</span>
+            </div>
+            <p class="muted small">
+              تاريخ التسجيل:
+              ${enrollment.enrolled_at
+                ? new Date(enrollment.enrolled_at).toLocaleDateString("ar-EG")
+                : "—"}
+            </p>
+          </article>`
+        ).join("")
+      : `<div class="empty">
+           لا توجد تسجيلات داخلية مرتبطة بحسابك حاليًا.
+         </div>`;
+
+  // Announcements
+  document.getElementById("announcements").innerHTML =
+    announcements.length
+      ? announcements.map(announcement => `
+          <article class="item">
+            <strong>${esc(announcement.title)}</strong>
+            <p>${esc(announcement.body)}</p>
+            <p class="muted small">
+              ${announcement.created_at
+                ? new Date(announcement.created_at).toLocaleDateString("ar-EG")
+                : ""}
+            </p>
+          </article>`
+        ).join("")
+      : `<div class="empty">لا توجد إعلانات منشورة حاليًا.</div>`;
+
+  // Learning summary
+  const completed = progress.filter(item => item.completed).length;
+
+  document.getElementById("summary").innerHTML = `
+    <div class="item">
+      <span class="muted small">الكورسات الداخلية المسجل فيها</span>
+      <h3>${internalEnrollments.length}</h3>
+    </div>
+    <div class="item">
+      <span class="muted small">الكورسات العامة في قائمتي</span>
+      <h3>${savedCourses.length}</h3>
+    </div>
+    <div class="item">
+      <span class="muted small">الدروس المكتملة المسجلة</span>
+      <h3>${completed}</h3>
+    </div>
+    <div class="item">
+      <span class="muted small">إجمالي سجلات التقدم</span>
+      <h3>${progress.length}</h3>
+    </div>`;
+})();
+</script>
 </body>
 </html>
