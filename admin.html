@@ -29,7 +29,7 @@
     <section class="hero">
       <div class="eyebrow">NGD ADMINISTRATION</div>
       <h1>لوحة إدارة الأكاديمية</h1>
-      <p class="muted">إدارة الكورسات والدروس والإعلانات المنشورة في بوابة NGD Academy.</p>
+      <p class="muted">إدارة الكورسات والدروس والإعلانات، وتجهيز برنامج تدريب وتطوير متطوعي NGD Academy.</p>
     </section>
 
     <div id="global-status" class="status hidden" role="status" aria-live="polite"></div>
@@ -97,6 +97,118 @@
 
         <button type="submit">إضافة الإعلان</button>
       </form>
+    </section>
+
+
+    <!-- Volunteer training management -->
+    <section class="card">
+      <h2>برنامج تدريب المتطوعين</h2>
+      <p class="muted small">أنشئ تدريبًا مشتركًا لكل المتطوعين أو تدريبًا خاصًا بلجنة. لن يظهر التدريب للمتطوعين إلا بعد نشره وحلول موعد إتاحته.</p>
+
+      <form id="volunteer-training-form" class="portal-form">
+        <label for="vt-title">اسم التدريب *</label>
+        <input id="vt-title" name="title" required maxlength="200" placeholder="مثال: أساسيات العمل داخل NGD">
+
+        <label for="vt-description">وصف التدريب</label>
+        <textarea id="vt-description" name="description" rows="3" maxlength="3000" placeholder="هدف التدريب ومخرجاته"></textarea>
+
+        <label for="vt-instructions">التعليمات / المطلوب تسليمه</label>
+        <textarea id="vt-instructions" name="instructions" rows="4" maxlength="5000" placeholder="اشرح المطلوب من المتطوع بالتحديد"></textarea>
+
+        <label for="vt-type">نوع التدريب *</label>
+        <select id="vt-type" name="training_type" required>
+          <option value="shared">تدريب مشترك لكل المتطوعين</option>
+          <option value="committee">تدريب خاص بلجنة</option>
+        </select>
+
+        <div id="vt-committee-wrap" class="hidden">
+          <label for="vt-committee">اللجنة *</label>
+          <select id="vt-committee" name="committee_key">
+            <option value="">اختر اللجنة</option>
+            <option value="graphics">Graphics</option>
+            <option value="media">Media</option>
+            <option value="marketing">Marketing</option>
+            <option value="content-writing">Content Writing</option>
+            <option value="organizing">Organizing</option>
+            <option value="monitoring-evaluation">Monitoring &amp; Evaluation</option>
+            <option value="training-development">Training &amp; Development</option>
+          </select>
+        </div>
+
+        <label for="vt-content-url">رابط المادة أو الفيديو (اختياري)</label>
+        <input id="vt-content-url" name="content_url" type="url" placeholder="https://...">
+
+        <label for="vt-available">موعد إتاحة التدريب *</label>
+        <input id="vt-available" name="available_at" type="datetime-local" required>
+
+        <label for="vt-due">آخر موعد للتسليم (اختياري)</label>
+        <input id="vt-due" name="due_at" type="datetime-local">
+
+        <label class="check-row" for="vt-published">
+          <input id="vt-published" name="published" type="checkbox">
+          نشر التدريب فورًا عند موعد إتاحته
+        </label>
+
+        <button type="submit">حفظ التدريب</button>
+      </form>
+    </section>
+
+    <section class="card">
+      <div class="section-title">
+        <h2>التدريبات الحالية</h2>
+        <button id="vt-refresh" type="button" class="secondary-btn">تحديث</button>
+      </div>
+      <div id="vt-list" class="list"><div class="empty">جارٍ تحميل التدريبات…</div></div>
+    </section>
+
+    <section class="card">
+      <h2>إضافة / تفعيل عضوية متطوع</h2>
+      <p class="muted small">يُستخدم هذا القسم بعد إنشاء حساب المتطوع في Supabase Auth. أدخل User ID الصحيح من حسابه، ولا تستخدم البريد الإلكتروني بدل المعرّف.</p>
+      <form id="volunteer-membership-form" class="portal-form">
+        <label for="vm-user-id">معرّف حساب المتطوع (User ID) *</label>
+        <input id="vm-user-id" name="user_id" required placeholder="UUID من Supabase Auth" pattern="[0-9a-fA-F-]{36}" title="أدخل UUID صحيحًا">
+
+        <label for="vm-committee">اللجنة *</label>
+        <select id="vm-committee" name="committee_key" required>
+          <option value="">اختر اللجنة</option>
+          <option value="graphics">Graphics</option>
+          <option value="media">Media</option>
+          <option value="marketing">Marketing</option>
+          <option value="content-writing">Content Writing</option>
+          <option value="organizing">Organizing</option>
+          <option value="monitoring-evaluation">Monitoring &amp; Evaluation</option>
+          <option value="training-development">Training &amp; Development</option>
+        </select>
+
+        <label for="vm-cohort">دفعة / موسم التطوع (اختياري)</label>
+        <input id="vm-cohort" name="cohort" maxlength="100" placeholder="مثال: Summer 2027">
+
+        <label for="vm-status">حالة العضوية</label>
+        <select id="vm-status" name="status">
+          <option value="active">فعّال</option>
+          <option value="inactive">غير فعّال</option>
+          <option value="suspended">موقوف</option>
+        </select>
+
+        <button type="submit">حفظ العضوية</button>
+      </form>
+    </section>
+
+    <section class="card">
+      <div class="section-title">
+        <h2>عضويات المتطوعين</h2>
+        <button id="vm-refresh" type="button" class="secondary-btn">تحديث</button>
+      </div>
+      <div id="vm-list" class="list"><div class="empty">جارٍ تحميل العضويات…</div></div>
+    </section>
+
+    <section class="card">
+      <div class="section-title">
+        <h2>تسليمات المتطوعين</h2>
+        <button id="vs-refresh" type="button" class="secondary-btn">تحديث</button>
+      </div>
+      <p class="muted small">يمكن مراجعة التسليم وتحديد ما إذا كان مقبولًا أو يحتاج إلى تعديل مع كتابة الملاحظات.</p>
+      <div id="vs-list" class="list"><div class="empty">جارٍ تحميل التسليمات…</div></div>
     </section>
 
     <section class="card">
@@ -352,6 +464,277 @@
         await loadAnnouncements();
       }
 
+
+      const committeeNames = {
+        'graphics': 'Graphics',
+        'media': 'Media',
+        'marketing': 'Marketing',
+        'content-writing': 'Content Writing',
+        'organizing': 'Organizing',
+        'monitoring-evaluation': 'Monitoring & Evaluation',
+        'training-development': 'Training & Development'
+      };
+
+      function dateInputToIso(value) {
+        if (!value) return null;
+        const date = new Date(value);
+        return Number.isNaN(date.getTime()) ? null : date.toISOString();
+      }
+
+      function trainingTypeLabel(type) {
+        return type === 'committee' ? 'تدريب لجنة' : 'تدريب مشترك';
+      }
+
+      async function loadVolunteerTrainings() {
+        const list = byId('vt-list');
+        const { data, error } = await db
+          .from('volunteer_trainings')
+          .select('id,title,description,instructions,training_type,committee_key,content_url,available_at,due_at,published,created_at')
+          .order('created_at', { ascending: false });
+
+        if (error) {
+          list.innerHTML = '<div class="empty">تعذر تحميل التدريبات.</div>';
+          NGDPortal.show(statusId, 'خطأ تحميل تدريبات المتطوعين: ' + error.message, 'error');
+          return;
+        }
+
+        list.innerHTML = data?.length ? data.map(item => `
+          <article class="item">
+            <div class="item-top">
+              <strong>${NGDPortal.esc(item.title)}</strong>
+              <span class="pill">${item.published ? 'منشور' : 'مسودة'}</span>
+            </div>
+            <p class="muted small">${NGDPortal.esc(trainingTypeLabel(item.training_type))}${item.committee_key ? ' · ' + NGDPortal.esc(committeeNames[item.committee_key] || item.committee_key) : ''}</p>
+            <p>${NGDPortal.esc(item.description || 'لا يوجد وصف.')}</p>
+            <p class="muted small">الإتاحة: ${item.available_at ? new Date(item.available_at).toLocaleString('ar-EG') : '—'}</p>
+            <p class="muted small">آخر موعد: ${item.due_at ? new Date(item.due_at).toLocaleString('ar-EG') : 'غير محدد'}</p>
+            ${item.content_url ? `<p><a href="${NGDPortal.esc(item.content_url)}" target="_blank" rel="noopener noreferrer">فتح مادة التدريب</a></p>` : ''}
+            <div class="button-row">
+              <button type="button" class="secondary-btn toggle-vt" data-id="${NGDPortal.esc(item.id)}" data-published="${item.published ? 'true' : 'false'}">${item.published ? 'إلغاء النشر' : 'نشر التدريب'}</button>
+            </div>
+          </article>`).join('') : '<div class="empty">لم تتم إضافة تدريبات حتى الآن.</div>';
+
+        list.querySelectorAll('.toggle-vt').forEach(button => {
+          button.addEventListener('click', async () => {
+            button.disabled = true;
+            const nextPublished = button.dataset.published !== 'true';
+            const { error: updateError } = await db
+              .from('volunteer_trainings')
+              .update({ published: nextPublished, updated_at: new Date().toISOString() })
+              .eq('id', button.dataset.id);
+
+            if (updateError) {
+              NGDPortal.show(statusId, 'تعذر تحديث التدريب: ' + updateError.message, 'error');
+              button.disabled = false;
+              return;
+            }
+            NGDPortal.show(statusId, nextPublished ? 'تم نشر التدريب.' : 'تم إلغاء نشر التدريب.', 'success');
+            await loadVolunteerTrainings();
+          });
+        });
+      }
+
+      async function handleVolunteerTrainingSubmit(event) {
+        event.preventDefault();
+        const form = event.currentTarget;
+        const values = formValues(form);
+        const type = values.training_type;
+        const availableAt = dateInputToIso(values.available_at);
+        const dueAt = dateInputToIso(values.due_at);
+
+        if (!availableAt) {
+          NGDPortal.show(statusId, 'حدد موعد إتاحة صحيحًا.', 'error');
+          return;
+        }
+        if (values.due_at && !dueAt) {
+          NGDPortal.show(statusId, 'حدد موعد تسليم صحيحًا.', 'error');
+          return;
+        }
+        if (dueAt && new Date(dueAt) < new Date(availableAt)) {
+          NGDPortal.show(statusId, 'موعد التسليم يجب أن يكون بعد موعد الإتاحة.', 'error');
+          return;
+        }
+        if (type === 'committee' && !values.committee_key) {
+          NGDPortal.show(statusId, 'اختر اللجنة الخاصة بالتدريب.', 'error');
+          return;
+        }
+
+        setBusy(form, true);
+        const { error } = await db.from('volunteer_trainings').insert({
+          title: String(values.title || '').trim(),
+          description: String(values.description || '').trim() || null,
+          instructions: String(values.instructions || '').trim() || null,
+          training_type: type,
+          committee_key: type === 'committee' ? values.committee_key : null,
+          content_url: String(values.content_url || '').trim() || null,
+          available_at: availableAt,
+          due_at: dueAt,
+          published: publishedValue(form, 'published'),
+          created_by: adminUser.id,
+          updated_at: new Date().toISOString()
+        });
+        setBusy(form, false);
+
+        if (error) {
+          NGDPortal.show(statusId, 'تعذر حفظ التدريب: ' + error.message, 'error');
+          return;
+        }
+
+        form.reset();
+        byId('vt-type').value = 'shared';
+        byId('vt-committee-wrap').classList.add('hidden');
+        NGDPortal.show(statusId, 'تم حفظ التدريب بنجاح.', 'success');
+        await loadVolunteerTrainings();
+      }
+
+      async function handleMembershipSubmit(event) {
+        event.preventDefault();
+        const form = event.currentTarget;
+        const values = formValues(form);
+        const userId = String(values.user_id || '').trim();
+
+        if (!/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(userId)) {
+          NGDPortal.show(statusId, 'معرّف المستخدم يجب أن يكون UUID صحيحًا.', 'error');
+          return;
+        }
+
+        setBusy(form, true);
+        const { error } = await db
+          .from('volunteer_training_memberships')
+          .upsert({
+            user_id: userId,
+            committee_key: values.committee_key,
+            cohort: String(values.cohort || '').trim() || null,
+            status: values.status
+          }, { onConflict: 'user_id,committee_key' });
+
+        setBusy(form, false);
+        if (error) {
+          NGDPortal.show(statusId, 'تعذر حفظ العضوية. تأكد أن الحساب موجود في Supabase Auth. التفاصيل: ' + error.message, 'error');
+          return;
+        }
+
+        form.reset();
+        byId('vm-status').value = 'active';
+        NGDPortal.show(statusId, 'تم حفظ عضوية المتطوع.', 'success');
+        await loadVolunteerMemberships();
+      }
+
+      async function loadVolunteerMemberships() {
+        const list = byId('vm-list');
+        const { data, error } = await db
+          .from('volunteer_training_memberships')
+          .select('id,user_id,committee_key,cohort,status,joined_at')
+          .order('created_at', { ascending: false });
+
+        if (error) {
+          list.innerHTML = '<div class="empty">تعذر تحميل العضويات.</div>';
+          NGDPortal.show(statusId, 'خطأ تحميل عضويات المتطوعين: ' + error.message, 'error');
+          return;
+        }
+
+        list.innerHTML = data?.length ? data.map(member => `
+          <article class="item">
+            <div class="item-top">
+              <strong>${NGDPortal.esc(committeeNames[member.committee_key] || member.committee_key)}</strong>
+              <span class="pill">${member.status === 'active' ? 'فعّال' : member.status === 'inactive' ? 'غير فعّال' : 'موقوف'}</span>
+            </div>
+            <p class="muted small">User ID: ${NGDPortal.esc(member.user_id)}</p>
+            ${member.cohort ? `<p class="muted small">الدفعة: ${NGDPortal.esc(member.cohort)}</p>` : ''}
+            <div class="button-row">
+              <button type="button" class="secondary-btn membership-status" data-id="${NGDPortal.esc(member.id)}" data-status="${NGDPortal.esc(member.status)}">${member.status === 'active' ? 'إيقاف العضوية' : 'تفعيل العضوية'}</button>
+            </div>
+          </article>`).join('') : '<div class="empty">لا توجد عضويات مسجلة حاليًا. يمكنك تجهيز التدريبات أولًا وإضافة الأعضاء لاحقًا.</div>';
+
+        list.querySelectorAll('.membership-status').forEach(button => {
+          button.addEventListener('click', async () => {
+            button.disabled = true;
+            const nextStatus = button.dataset.status === 'active' ? 'inactive' : 'active';
+            const { error: updateError } = await db
+              .from('volunteer_training_memberships')
+              .update({ status: nextStatus })
+              .eq('id', button.dataset.id);
+
+            if (updateError) {
+              NGDPortal.show(statusId, 'تعذر تحديث العضوية: ' + updateError.message, 'error');
+              button.disabled = false;
+              return;
+            }
+            NGDPortal.show(statusId, 'تم تحديث حالة العضوية.', 'success');
+            await loadVolunteerMemberships();
+          });
+        });
+      }
+
+      async function loadVolunteerSubmissions() {
+        const list = byId('vs-list');
+        const { data, error } = await db
+          .from('volunteer_training_submissions')
+          .select('id,training_id,user_id,submission_text,submission_url,review_status,feedback,submitted_at,volunteer_trainings(title)')
+          .order('submitted_at', { ascending: false });
+
+        if (error) {
+          list.innerHTML = '<div class="empty">تعذر تحميل التسليمات.</div>';
+          NGDPortal.show(statusId, 'خطأ تحميل تسليمات المتطوعين: ' + error.message, 'error');
+          return;
+        }
+
+        const statusLabels = {
+          submitted: 'قيد المراجعة',
+          needs_revision: 'يحتاج تعديلًا',
+          approved: 'مقبول'
+        };
+
+        list.innerHTML = data?.length ? data.map(item => `
+          <article class="item submission-item" data-submission-id="${NGDPortal.esc(item.id)}">
+            <div class="item-top">
+              <strong>${NGDPortal.esc(item.volunteer_trainings?.title || 'تدريب')}</strong>
+              <span class="pill">${NGDPortal.esc(statusLabels[item.review_status] || item.review_status)}</span>
+            </div>
+            <p class="muted small">User ID: ${NGDPortal.esc(item.user_id)}</p>
+            <p class="muted small">تاريخ التسليم: ${item.submitted_at ? new Date(item.submitted_at).toLocaleString('ar-EG') : '—'}</p>
+            ${item.submission_text ? `<p>${NGDPortal.esc(item.submission_text)}</p>` : ''}
+            ${item.submission_url ? `<p><a href="${NGDPortal.esc(item.submission_url)}" target="_blank" rel="noopener noreferrer">فتح رابط التسليم</a></p>` : ''}
+            <label>قرار المراجعة</label>
+            <select class="submission-review-status">
+              <option value="submitted" ${item.review_status === 'submitted' ? 'selected' : ''}>قيد المراجعة</option>
+              <option value="needs_revision" ${item.review_status === 'needs_revision' ? 'selected' : ''}>يحتاج تعديلًا</option>
+              <option value="approved" ${item.review_status === 'approved' ? 'selected' : ''}>مقبول</option>
+            </select>
+            <label>ملاحظات للمُتطوع</label>
+            <textarea class="submission-feedback" rows="3" maxlength="5000" placeholder="اكتب الملاحظات هنا">${NGDPortal.esc(item.feedback || '')}</textarea>
+            <button type="button" class="save-submission-review">حفظ المراجعة</button>
+          </article>`).join('') : '<div class="empty">لا توجد تسليمات حتى الآن. ستظهر هنا عندما يبدأ المتطوعون إرسال أعمالهم.</div>';
+
+        list.querySelectorAll('.save-submission-review').forEach(button => {
+          button.addEventListener('click', async () => {
+            const article = button.closest('.submission-item');
+            const submissionId = article.dataset.submissionId;
+            const reviewStatus = article.querySelector('.submission-review-status').value;
+            const feedback = article.querySelector('.submission-feedback').value.trim();
+
+            button.disabled = true;
+            const { error: updateError } = await db
+              .from('volunteer_training_submissions')
+              .update({
+                review_status: reviewStatus,
+                feedback: feedback || null,
+                reviewed_by: adminUser.id,
+                reviewed_at: new Date().toISOString()
+              })
+              .eq('id', submissionId);
+
+            button.disabled = false;
+            if (updateError) {
+              NGDPortal.show(statusId, 'تعذر حفظ المراجعة: ' + updateError.message, 'error');
+              return;
+            }
+            NGDPortal.show(statusId, 'تم حفظ مراجعة التسليم.', 'success');
+            await loadVolunteerSubmissions();
+          });
+        });
+      }
+
       async function start() {
         const allowed = await ensureAdmin();
         if (!allowed) return;
@@ -360,11 +743,32 @@
         byId('course-form').addEventListener('submit', handleCourseSubmit);
         byId('lesson-form').addEventListener('submit', handleLessonSubmit);
         byId('announcement-form').addEventListener('submit', handleAnnouncementSubmit);
+
+        byId('volunteer-training-form').addEventListener('submit', handleVolunteerTrainingSubmit);
+        byId('volunteer-membership-form').addEventListener('submit', handleMembershipSubmit);
+
+        byId('vt-type').addEventListener('change', () => {
+          const isCommittee = byId('vt-type').value === 'committee';
+          byId('vt-committee-wrap').classList.toggle('hidden', !isCommittee);
+          byId('vt-committee').required = isCommittee;
+          if (!isCommittee) byId('vt-committee').value = '';
+        });
+
+        byId('vt-refresh').addEventListener('click', loadVolunteerTrainings);
+        byId('vm-refresh').addEventListener('click', loadVolunteerMemberships);
+        byId('vs-refresh').addEventListener('click', loadVolunteerSubmissions);
+
         byId('refresh').addEventListener('click', async () => {
           await Promise.all([loadCourses(), loadAnnouncements()]);
         });
 
-        await Promise.all([loadCourses(), loadAnnouncements()]);
+        await Promise.all([
+          loadCourses(),
+          loadAnnouncements(),
+          loadVolunteerTrainings(),
+          loadVolunteerMemberships(),
+          loadVolunteerSubmissions()
+        ]);
       }
 
       start().catch(error => {
