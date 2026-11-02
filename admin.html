@@ -136,15 +136,23 @@
           </select>
         </div>
 
-        <label for="vt-content-url">رابط المادة أو الفيديو (اختياري)</label>
-        <input id="vt-content-url" name="content_url" type="url" placeholder="https://...">
+        <label for="vt-content-url">رابط حضور التدريب / المادة *</label>
+        <input id="vt-content-url" name="content_url" type="url" required placeholder="رابط الفيديو أو التسجيل أو المادة">
+
+        <label for="vt-submission-form-url">رابط فورم التسليم (اختياري)</label>
+        <input id="vt-submission-form-url" name="submission_form_url" type="url" placeholder="رابط Google Forms">
+
+        <label for="vt-sort-order">ترتيب التدريب</label>
+        <input id="vt-sort-order" name="sort_order" type="number" min="1" step="1" placeholder="اتركه فارغًا للترتيب التلقائي">
+        <p class="muted small">الأرقام الأصغر تظهر أولًا. عند تركه فارغًا سيُضاف التدريب في نهاية القائمة.</p>
 
         <label for="vt-available">موعد إتاحة التدريب *</label>
         <p class="muted small">اختر تاريخًا ووقتًا مستقبليًا. إذا فعّلت خيار النشر، سيظهر التدريب تلقائيًا عند حلول الموعد. اتركه غير مفعّل لحفظه كمسودة.</p>
         <input id="vt-available" name="available_at" type="datetime-local" required>
 
-        <label for="vt-due">آخر موعد للتسليم (اختياري)</label>
+        <label for="vt-due">موعد إغلاق رابط التسليم (اختياري)</label>
         <input id="vt-due" name="due_at" type="datetime-local">
+        <p class="muted small">بعد هذا الموعد سيتوقف زر التسليم داخل البوابة. ولإغلاق Google Form نفسه، فعّل إيقاف استقبال الردود من إعدادات Google Forms.</p>
 
         <label class="check-row" for="vt-published">
           <input id="vt-published" name="published" type="checkbox">
@@ -513,8 +521,9 @@
         const list = byId('vt-list');
         const { data, error } = await db
           .from('volunteer_trainings')
-          .select('id,title,description,instructions,training_type,committee_key,content_url,available_at,due_at,published,created_at')
-          .order('created_at', { ascending: false });
+          .select('id,title,description,instructions,training_type,committee_key,content_url,submission_form_url,sort_order,available_at,due_at,published,created_at')
+          .order('sort_order', { ascending: true })
+          .order('created_at', { ascending: true });
 
         if (error) {
           list.innerHTML = '<div class="empty">تعذر تحميل التدريبات.</div>';
@@ -522,8 +531,13 @@
           return;
         }
 
-        list.innerHTML = data?.length ? data.map(item => `
-          <article class="item">
+        const items = (data || []).slice().sort((a, b) =>
+          (Number(a.sort_order) || 999999) - (Number(b.sort_order) || 999999) ||
+          new Date(a.created_at || 0) - new Date(b.created_at || 0)
+        );
+
+        list.innerHTML = items.length ? items.map(item => `
+          <article class="item vt-admin-item" data-id="${NGDPortal.esc(item.id)}">
             <div class="item-top">
               <strong>${NGDPortal.esc(item.title)}</strong>
               <span class="pill">${NGDPortal.esc(trainingState(item))}</span>
@@ -531,71 +545,94 @@
             <p class="muted small">${NGDPortal.esc(trainingTypeLabel(item.training_type))}${item.committee_key ? ' · ' + NGDPortal.esc(committeeNames[item.committee_key] || item.committee_key) : ''}</p>
             <p>${NGDPortal.esc(item.description || 'لا يوجد وصف.')}</p>
             ${item.instructions ? `<p class="muted small">التعليمات: ${NGDPortal.esc(item.instructions)}</p>` : ''}
-            ${item.content_url ? `<p><a href="${NGDPortal.esc(item.content_url)}" target="_blank" rel="noopener noreferrer">فتح مادة التدريب</a></p>` : ''}
-            <div class="portal-form" style="margin-top:12px">
-              <label>موعد الظهور (بتوقيت مصر المحلي)</label>
+            <div class="portal-form vt-edit-panel" style="margin-top:12px">
+              <label>رابط حضور التدريب / المادة</label>
+              <input class="vt-edit-content-url" type="url" value="${NGDPortal.esc(item.content_url || '')}" placeholder="https://...">
+              <label>رابط فورم التسليم</label>
+              <input class="vt-edit-form-url" type="url" value="${NGDPortal.esc(item.submission_form_url || '')}" placeholder="https://forms.google.com/...">
+              <label>ترتيب التدريب (الأصغر يظهر أولًا)</label>
+              <input class="vt-edit-sort-order" type="number" min="1" step="1" value="${Number(item.sort_order) || 10}">
+              <label>موعد ظهور التدريب</label>
               <input class="vt-edit-available" type="datetime-local" value="${isoToDateTimeLocal(item.available_at)}" required>
-              <label>آخر موعد للتسليم (اختياري)</label>
+              <label>موعد إغلاق التسليم (اختياري)</label>
               <input class="vt-edit-due" type="datetime-local" value="${isoToDateTimeLocal(item.due_at)}">
+              <div class="muted small">
+                <p>الحالة: ${NGDPortal.esc(trainingState(item))}</p>
+                <p>آخر موعد: ${item.due_at ? new Date(item.due_at).toLocaleString('ar-EG') : 'غير محدد'}</p>
+              </div>
               <div class="button-row">
-                <button type="button" class="save-vt-schedule" data-id="${NGDPortal.esc(item.id)}">حفظ المواعيد</button>
+                <button type="button" class="save-vt-settings" data-id="${NGDPortal.esc(item.id)}">حفظ الروابط والترتيب والمواعيد</button>
                 ${item.published
                   ? `<button type="button" class="secondary-btn toggle-vt" data-id="${NGDPortal.esc(item.id)}">إيقاف / إخفاء التدريب</button>`
-                  : `<button type="button" class="secondary-btn schedule-vt" data-id="${NGDPortal.esc(item.id)}">جدولة إعادة النشر</button>
+                  : `<button type="button" class="secondary-btn schedule-vt" data-id="${NGDPortal.esc(item.id)}">تفعيل بموعد محدد</button>
                      <button type="button" class="publish-now-vt" data-id="${NGDPortal.esc(item.id)}">نشر الآن</button>`}
               </div>
             </div>
           </article>`).join('') : '<div class="empty">لم تتم إضافة تدريبات حتى الآن.</div>';
 
-        list.querySelectorAll('.save-vt-schedule').forEach(button => {
+        list.querySelectorAll('.save-vt-settings').forEach(button => {
           button.addEventListener('click', async () => {
-            const article = button.closest('.item');
+            const article = button.closest('.vt-admin-item');
             const availableInput = article.querySelector('.vt-edit-available');
             const dueInput = article.querySelector('.vt-edit-due');
+            const contentUrl = article.querySelector('.vt-edit-content-url').value.trim();
+            const formUrl = article.querySelector('.vt-edit-form-url').value.trim();
+            const sortOrder = Number(article.querySelector('.vt-edit-sort-order').value);
             const availableAt = dateInputToIso(availableInput.value);
             const dueAt = dateInputToIso(dueInput.value);
 
+            if (contentUrl && !/^https?:\/\//i.test(contentUrl)) {
+              NGDPortal.show(statusId, 'رابط الحضور يجب أن يبدأ بـ https:// أو http://.', 'error');
+              return;
+            }
+            if (formUrl && !/^https?:\/\//i.test(formUrl)) {
+              NGDPortal.show(statusId, 'رابط فورم التسليم يجب أن يبدأ بـ https:// أو http://.', 'error');
+              return;
+            }
+            if (!Number.isInteger(sortOrder) || sortOrder < 1) {
+              NGDPortal.show(statusId, 'ترتيب التدريب يجب أن يكون رقمًا صحيحًا أكبر من صفر.', 'error');
+              return;
+            }
             if (!availableAt) {
               NGDPortal.show(statusId, 'حدد موعد ظهور صحيحًا.', 'error');
               return;
             }
             if (dueInput.value && !dueAt) {
-              NGDPortal.show(statusId, 'حدد موعد تسليم صحيحًا.', 'error');
+              NGDPortal.show(statusId, 'حدد موعد إغلاق تسليم صحيحًا.', 'error');
               return;
             }
             if (dueAt && new Date(dueAt) < new Date(availableAt)) {
-              NGDPortal.show(statusId, 'موعد التسليم يجب أن يكون بعد موعد الظهور.', 'error');
+              NGDPortal.show(statusId, 'موعد إغلاق التسليم يجب أن يكون بعد موعد ظهور التدريب.', 'error');
               return;
             }
 
             button.disabled = true;
-            const { error: updateError } = await db
-              .from('volunteer_trainings')
-              .update({
-                available_at: availableAt,
-                due_at: dueAt,
-                updated_at: new Date().toISOString()
-              })
-              .eq('id', button.dataset.id);
-
+            const { error: updateError } = await db.from('volunteer_trainings').update({
+              content_url: contentUrl || null,
+              submission_form_url: formUrl || null,
+              sort_order: sortOrder,
+              available_at: availableAt,
+              due_at: dueAt,
+              updated_at: new Date().toISOString()
+            }).eq('id', button.dataset.id);
             button.disabled = false;
+
             if (updateError) {
-              NGDPortal.show(statusId, 'تعذر حفظ مواعيد التدريب: ' + updateError.message, 'error');
+              NGDPortal.show(statusId, 'تعذر حفظ بيانات التدريب: ' + updateError.message, 'error');
               return;
             }
-            NGDPortal.show(statusId, 'تم حفظ المواعيد. إذا كان التدريب منشورًا فسيظهر عند موعد الإتاحة، وإذا كان متوقفًا فلن يظهر حتى تختار «جدولة إعادة النشر».', 'success');
+            NGDPortal.show(statusId, 'تم حفظ الروابط والترتيب والمواعيد بنجاح.', 'success');
             await loadVolunteerTrainings();
           });
         });
 
         list.querySelectorAll('.toggle-vt').forEach(button => {
           button.addEventListener('click', async () => {
+            if (!confirm('سيتم إخفاء التدريب عن المتطوعين دون حذف بياناته. هل تريد المتابعة؟')) return;
             button.disabled = true;
-            const { error: updateError } = await db
-              .from('volunteer_trainings')
+            const { error: updateError } = await db.from('volunteer_trainings')
               .update({ published: false, updated_at: new Date().toISOString() })
               .eq('id', button.dataset.id);
-
             button.disabled = false;
             if (updateError) {
               NGDPortal.show(statusId, 'تعذر إيقاف التدريب: ' + updateError.message, 'error');
@@ -608,23 +645,18 @@
 
         list.querySelectorAll('.schedule-vt').forEach(button => {
           button.addEventListener('click', async () => {
-            const article = button.closest('.item');
+            const article = button.closest('.vt-admin-item');
             const availableInput = article.querySelector('.vt-edit-available');
             const dueInput = article.querySelector('.vt-edit-due');
             const availableAt = dateInputToIso(availableInput.value);
             const dueAt = dateInputToIso(dueInput.value);
-            if (!availableAt) {
-              NGDPortal.show(statusId, 'حدد تاريخ ووقت إعادة النشر أولًا.', 'error');
-              availableInput.focus();
-              return;
-            }
-            if (new Date(availableAt) <= new Date()) {
-              NGDPortal.show(statusId, 'موعد الجدولة يجب أن يكون في المستقبل. إذا كنت تريد إظهاره الآن استخدم زر «نشر الآن».', 'error');
+            if (!availableAt || new Date(availableAt) <= new Date()) {
+              NGDPortal.show(statusId, 'حدد موعدًا مستقبليًا صحيحًا للتفعيل.', 'error');
               availableInput.focus();
               return;
             }
             if (dueInput.value && (!dueAt || new Date(dueAt) < new Date(availableAt))) {
-              NGDPortal.show(statusId, 'موعد التسليم يجب أن يكون بعد موعد الظهور.', 'error');
+              NGDPortal.show(statusId, 'موعد إغلاق التسليم يجب أن يكون بعد موعد ظهور التدريب.', 'error');
               return;
             }
             button.disabled = true;
@@ -636,10 +668,10 @@
             }).eq('id', button.dataset.id);
             button.disabled = false;
             if (updateError) {
-              NGDPortal.show(statusId, 'تعذرت جدولة إعادة النشر: ' + updateError.message, 'error');
+              NGDPortal.show(statusId, 'تعذرت جدولة التدريب: ' + updateError.message, 'error');
               return;
             }
-            NGDPortal.show(statusId, 'تم تفعيل التدريب وجدولة ظهوره في الموعد المحدد. لن يظهر قبل هذا الموعد.', 'success');
+            NGDPortal.show(statusId, 'تم تفعيل التدريب وجدولة ظهوره في الموعد المحدد.', 'success');
             await loadVolunteerTrainings();
           });
         });
@@ -689,6 +721,20 @@
           return;
         }
 
+        let sortOrder = Number(values.sort_order);
+        if (!Number.isInteger(sortOrder) || sortOrder < 1) {
+          const { data: lastOrderRows, error: orderError } = await db
+            .from('volunteer_trainings')
+            .select('sort_order')
+            .order('sort_order', { ascending: false })
+            .limit(1);
+          if (orderError) {
+            NGDPortal.show(statusId, 'تعذر تحديد ترتيب التدريب تلقائيًا: ' + orderError.message, 'error');
+            return;
+          }
+          sortOrder = (Number(lastOrderRows?.[0]?.sort_order) || 0) + 10;
+        }
+
         setBusy(form, true);
         const { error } = await db.from('volunteer_trainings').insert({
           title: String(values.title || '').trim(),
@@ -697,6 +743,8 @@
           training_type: type,
           committee_key: type === 'committee' ? values.committee_key : null,
           content_url: String(values.content_url || '').trim() || null,
+          submission_form_url: String(values.submission_form_url || '').trim() || null,
+          sort_order: sortOrder,
           available_at: availableAt,
           due_at: dueAt,
           published: publishedValue(form, 'published'),
@@ -712,6 +760,7 @@
 
         form.reset();
         byId('vt-type').value = 'shared';
+        byId('vt-sort-order').value = '';
         byId('vt-committee-wrap').classList.add('hidden');
         NGDPortal.show(statusId, 'تم حفظ التدريب بنجاح.', 'success');
         await loadVolunteerTrainings();
