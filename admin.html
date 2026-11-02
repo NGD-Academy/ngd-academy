@@ -485,6 +485,20 @@
         return type === 'committee' ? 'تدريب لجنة' : 'تدريب مشترك';
       }
 
+      function isoToDateTimeLocal(value) {
+        if (!value) return '';
+        const date = new Date(value);
+        if (Number.isNaN(date.getTime())) return '';
+        const local = new Date(date.getTime() - date.getTimezoneOffset() * 60000);
+        return local.toISOString().slice(0, 16);
+      }
+
+      function trainingState(item) {
+        if (!item.published) return 'مسودة / متوقف';
+        if (item.available_at && new Date(item.available_at) > new Date()) return 'مجدول';
+        return 'متاح للمتطوعين';
+      }
+
       async function loadVolunteerTrainings() {
         const list = byId('vt-list');
         const { data, error } = await db
@@ -502,17 +516,64 @@
           <article class="item">
             <div class="item-top">
               <strong>${NGDPortal.esc(item.title)}</strong>
-              <span class="pill">${item.published ? 'منشور' : 'مسودة'}</span>
+              <span class="pill">${NGDPortal.esc(trainingState(item))}</span>
             </div>
             <p class="muted small">${NGDPortal.esc(trainingTypeLabel(item.training_type))}${item.committee_key ? ' · ' + NGDPortal.esc(committeeNames[item.committee_key] || item.committee_key) : ''}</p>
             <p>${NGDPortal.esc(item.description || 'لا يوجد وصف.')}</p>
-            <p class="muted small">الإتاحة: ${item.available_at ? new Date(item.available_at).toLocaleString('ar-EG') : '—'}</p>
-            <p class="muted small">آخر موعد: ${item.due_at ? new Date(item.due_at).toLocaleString('ar-EG') : 'غير محدد'}</p>
+            ${item.instructions ? `<p class="muted small">التعليمات: ${NGDPortal.esc(item.instructions)}</p>` : ''}
             ${item.content_url ? `<p><a href="${NGDPortal.esc(item.content_url)}" target="_blank" rel="noopener noreferrer">فتح مادة التدريب</a></p>` : ''}
-            <div class="button-row">
-              <button type="button" class="secondary-btn toggle-vt" data-id="${NGDPortal.esc(item.id)}" data-published="${item.published ? 'true' : 'false'}">${item.published ? 'إلغاء النشر' : 'نشر التدريب'}</button>
+            <div class="portal-form" style="margin-top:12px">
+              <label>موعد الظهور</label>
+              <input class="vt-edit-available" type="datetime-local" value="${isoToDateTimeLocal(item.available_at)}" required>
+              <label>آخر موعد للتسليم (اختياري)</label>
+              <input class="vt-edit-due" type="datetime-local" value="${isoToDateTimeLocal(item.due_at)}">
+              <div class="button-row">
+                <button type="button" class="save-vt-schedule" data-id="${NGDPortal.esc(item.id)}">حفظ المواعيد</button>
+                <button type="button" class="secondary-btn toggle-vt" data-id="${NGDPortal.esc(item.id)}" data-published="${item.published ? 'true' : 'false'}">${item.published ? 'إيقاف / إخفاء التدريب' : 'تفعيل / نشر التدريب'}</button>
+              </div>
             </div>
           </article>`).join('') : '<div class="empty">لم تتم إضافة تدريبات حتى الآن.</div>';
+
+        list.querySelectorAll('.save-vt-schedule').forEach(button => {
+          button.addEventListener('click', async () => {
+            const article = button.closest('.item');
+            const availableInput = article.querySelector('.vt-edit-available');
+            const dueInput = article.querySelector('.vt-edit-due');
+            const availableAt = dateInputToIso(availableInput.value);
+            const dueAt = dateInputToIso(dueInput.value);
+
+            if (!availableAt) {
+              NGDPortal.show(statusId, 'حدد موعد ظهور صحيحًا.', 'error');
+              return;
+            }
+            if (dueInput.value && !dueAt) {
+              NGDPortal.show(statusId, 'حدد موعد تسليم صحيحًا.', 'error');
+              return;
+            }
+            if (dueAt && new Date(dueAt) < new Date(availableAt)) {
+              NGDPortal.show(statusId, 'موعد التسليم يجب أن يكون بعد موعد الظهور.', 'error');
+              return;
+            }
+
+            button.disabled = true;
+            const { error: updateError } = await db
+              .from('volunteer_trainings')
+              .update({
+                available_at: availableAt,
+                due_at: dueAt,
+                updated_at: new Date().toISOString()
+              })
+              .eq('id', button.dataset.id);
+
+            button.disabled = false;
+            if (updateError) {
+              NGDPortal.show(statusId, 'تعذر حفظ مواعيد التدريب: ' + updateError.message, 'error');
+              return;
+            }
+            NGDPortal.show(statusId, 'تم تحديث مواعيد التدريب. سيظهر تلقائيًا عند حلول الموعد إذا كان مفعّلًا.', 'success');
+            await loadVolunteerTrainings();
+          });
+        });
 
         list.querySelectorAll('.toggle-vt').forEach(button => {
           button.addEventListener('click', async () => {
