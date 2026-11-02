@@ -750,6 +750,7 @@
             <strong>${esc(training.title)}</strong>
             <span class="pill">${submission ? esc(reviewLabels[submission.review_status] || submission.review_status) : "متاح"}</span>
           </div>
+          <p class="muted small">${training.training_type === "shared" ? "تدريب مشترك لكل المتطوعين" : `تدريب لجنة: ${esc(training.committee_key === "hr" ? "Human Resources (HR)" : training.committee_key || "لجنتك")}`}</p>
           <p>${esc(training.description || "لا يوجد وصف مضاف لهذا التدريب.")}</p>
           ${training.instructions ? `<div class="item"><strong>التعليمات والمطلوب</strong><p>${esc(training.instructions)}</p></div>` : ""}
           <div class="muted small">
