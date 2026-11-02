@@ -103,6 +103,18 @@
     <div class="empty">جارٍ التحميل…</div>
   </div>
 
+  <!-- Volunteer training program -->
+  <section class="card" id="volunteer-training-section">
+    <div class="section-title">
+      <h2>برنامج تدريب المتطوعين</h2>
+      <span id="volunteer-training-count" class="pill">—</span>
+    </div>
+    <p class="muted small">التدريبات المشتركة وتدريبات لجنتك ستظهر هنا عند تفعيلها وحلول موعد إتاحتها.</p>
+    <div id="volunteer-trainings" class="list">
+      <div class="empty">جارٍ تحميل تدريبات المتطوعين…</div>
+    </div>
+  </section>
+
   <div class="section-title">
     <h2>الإعلانات</h2>
   </div>
@@ -637,6 +649,176 @@
       : `<div class="empty">
            لا توجد تسجيلات داخلية مرتبطة بحسابك حاليًا.
          </div>`;
+
+  // Volunteer training program
+  async function loadVolunteerTrainingProgram() {
+    const container = document.getElementById("volunteer-trainings");
+    const count = document.getElementById("volunteer-training-count");
+
+    const membershipRes = await db
+      .from("volunteer_training_memberships")
+      .select("committee_key,status")
+      .eq("user_id", user.id)
+      .eq("status", "active");
+
+    if (membershipRes.error) {
+      console.error("Volunteer membership error:", membershipRes.error);
+      count.textContent = "—";
+      container.innerHTML = `<div class="empty">تعذر التحقق من عضوية التطوع. حاول لاحقًا أو تواصل مع إدارة الأكاديمية.</div>`;
+      return;
+    }
+
+    const memberships = membershipRes.data || [];
+    if (!memberships.length) {
+      count.textContent = "0";
+      container.innerHTML = `<div class="empty">قسم تدريبات المتطوعين مخصص للأعضاء ذوي العضوية الفعّالة. لا توجد عضوية تطوع فعّالة مرتبطة بحسابك حاليًا.</div>`;
+      return;
+    }
+
+    const committeeKeys = [...new Set(memberships.map(item => item.committee_key).filter(Boolean))];
+    const nowIso = new Date().toISOString();
+
+    const sharedRes = await db
+      .from("volunteer_trainings")
+      .select("id,title,description,instructions,training_type,committee_key,content_url,available_at,due_at")
+      .eq("training_type", "shared")
+      .eq("published", true)
+      .lte("available_at", nowIso)
+      .order("available_at", { ascending: true });
+
+    let committeeTrainings = [];
+    let committeeError = null;
+    if (committeeKeys.length) {
+      const committeeRes = await db
+        .from("volunteer_trainings")
+        .select("id,title,description,instructions,training_type,committee_key,content_url,available_at,due_at")
+        .eq("training_type", "committee")
+        .eq("published", true)
+        .in("committee_key", committeeKeys)
+        .lte("available_at", nowIso)
+        .order("available_at", { ascending: true });
+      committeeTrainings = committeeRes.data || [];
+      committeeError = committeeRes.error;
+    }
+
+    if (sharedRes.error || committeeError) {
+      console.error("Volunteer training loading error:", sharedRes.error || committeeError);
+      count.textContent = "—";
+      container.innerHTML = `<div class="empty">تعذر تحميل التدريبات حاليًا. راجع صلاحيات قاعدة البيانات.</div>`;
+      return;
+    }
+
+    const trainings = [...(sharedRes.data || []), ...committeeTrainings]
+      .sort((a, b) => new Date(a.available_at) - new Date(b.available_at));
+
+    const submissionsRes = await db
+      .from("volunteer_training_submissions")
+      .select("id,training_id,submission_text,submission_url,review_status,feedback,submitted_at")
+      .eq("user_id", user.id)
+      .order("submitted_at", { ascending: false });
+
+    if (submissionsRes.error) {
+      console.error("Volunteer submissions loading error:", submissionsRes.error);
+      count.textContent = trainings.length;
+      container.innerHTML = `<div class="empty">تم تحميل التدريبات لكن تعذر تحميل حالة تسليماتك.</div>`;
+      return;
+    }
+
+    const latestSubmissionByTraining = new Map();
+    (submissionsRes.data || []).forEach(submission => {
+      if (!latestSubmissionByTraining.has(submission.training_id)) {
+        latestSubmissionByTraining.set(submission.training_id, submission);
+      }
+    });
+
+    const reviewLabels = {
+      submitted: "قيد المراجعة",
+      needs_revision: "مطلوب تعديل",
+      approved: "مقبول"
+    };
+
+    count.textContent = String(trainings.length);
+
+    container.innerHTML = trainings.length ? trainings.map(training => {
+      const submission = latestSubmissionByTraining.get(training.id);
+      const isOverdue = training.due_at && new Date(training.due_at) < new Date();
+      const contentUrl = safeUrl(training.content_url);
+
+      return `
+        <article class="item volunteer-training-item" data-training-id="${esc(training.id)}">
+          <div class="item-top">
+            <strong>${esc(training.title)}</strong>
+            <span class="pill">${submission ? esc(reviewLabels[submission.review_status] || submission.review_status) : "متاح"}</span>
+          </div>
+          <p>${esc(training.description || "لا يوجد وصف مضاف لهذا التدريب.")}</p>
+          ${training.instructions ? `<div class="item"><strong>التعليمات والمطلوب</strong><p>${esc(training.instructions)}</p></div>` : ""}
+          <div class="muted small">
+            <p>موعد الإتاحة: ${training.available_at ? new Date(training.available_at).toLocaleString("ar-EG") : "—"}</p>
+            <p>آخر موعد للتسليم: ${training.due_at ? new Date(training.due_at).toLocaleString("ar-EG") : "غير محدد"}</p>
+          </div>
+          ${contentUrl ? `<p><a class="btn secondary" href="${esc(contentUrl)}" target="_blank" rel="noopener noreferrer">فتح مادة التدريب</a></p>` : ""}
+          ${submission?.feedback ? `<div class="item"><strong>ملاحظات الإدارة</strong><p>${esc(submission.feedback)}</p></div>` : ""}
+          ${submission ? `<p class="muted small">آخر تسليم: ${submission.submitted_at ? new Date(submission.submitted_at).toLocaleString("ar-EG") : "—"}</p>` : ""}
+          <form class="portal-form volunteer-submission-form">
+            <label>إجابتك أو تفاصيل التنفيذ</label>
+            <textarea name="submission_text" rows="3" maxlength="10000" placeholder="اكتب إجابتك أو ملخص ما نفذته…">${esc(submission?.submission_text || "")}</textarea>
+            <label>رابط التسليم (اختياري)</label>
+            <input name="submission_url" type="url" value="${esc(submission?.submission_url || "")}" placeholder="https://...">
+            <button type="submit" ${isOverdue || submission?.review_status === "approved" ? "disabled" : ""}>
+              ${isOverdue ? "انتهى موعد التسليم" : submission ? "إعادة إرسال التدريب" : "إرسال التدريب"}
+            </button>
+            ${submission?.review_status === "approved" ? `<p class="muted small">تم اعتماد هذا التدريب. إذا احتجت تعديل الحالة، تواصل مع الإدارة.</p>` : ""}
+          </form>
+        </article>`;
+    }).join("") : `<div class="empty">لا توجد تدريبات مفعّلة ومتاحة لك حاليًا. ستظهر التدريبات هنا تلقائيًا عند حلول موعدها.</div>`;
+
+    container.querySelectorAll(".volunteer-submission-form").forEach(form => {
+      form.addEventListener("submit", async event => {
+        event.preventDefault();
+        const trainingCard = form.closest(".volunteer-training-item");
+        const trainingId = trainingCard.dataset.trainingId;
+        const formData = new FormData(form);
+        const submissionText = String(formData.get("submission_text") || "").trim();
+        const rawUrl = String(formData.get("submission_url") || "").trim();
+        const submissionUrl = rawUrl ? safeUrl(rawUrl) : null;
+
+        if (!submissionText && !submissionUrl) {
+          showMessage("اكتب إجابتك أو أضف رابط التسليم قبل الإرسال.");
+          return;
+        }
+        if (rawUrl && !submissionUrl) {
+          showMessage("رابط التسليم غير صحيح. استخدم رابطًا يبدأ بـ https:// أو http://.");
+          return;
+        }
+
+        const submitButton = form.querySelector('button[type="submit"]');
+        submitButton.disabled = true;
+        // Every resubmission is stored as a new attempt, compatible with the current insert RLS policy.
+        const result = await db
+          .from("volunteer_training_submissions")
+          .insert({
+            training_id: trainingId,
+            user_id: user.id,
+            submission_text: submissionText || null,
+            submission_url: submissionUrl,
+            review_status: "submitted",
+            submitted_at: new Date().toISOString()
+          });
+
+        submitButton.disabled = false;
+        if (result.error) {
+          console.error("Volunteer submission error:", result.error);
+          showMessage("تعذر إرسال التدريب. تأكد من أن موعد التسليم لم ينتهِ وأن صلاحيات قاعدة البيانات تسمح بالتسليم.");
+          return;
+        }
+
+        showMessage("تم إرسال التدريب بنجاح.", "success");
+        await loadVolunteerTrainingProgram();
+      });
+    });
+  }
+
+  await loadVolunteerTrainingProgram();
 
   // Announcements
   document.getElementById("announcements").innerHTML =
