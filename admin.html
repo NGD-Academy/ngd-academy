@@ -35,6 +35,18 @@
     .admin-training-body { padding:14px 17px 18px; border-top:1px solid #eee6d9; }
     .admin-training-body .vt-edit-panel { margin-top:14px; }
     .admin-section-hint { color:#707a84; font-size:.82rem; font-weight:400; }
+    .vt-admin-group, .vt-admin-committee-group { border:1px solid #dfd2bf; border-radius:14px; margin:16px 0; overflow:hidden; background:#fff; }
+    .vt-admin-group > summary, .vt-admin-committee-group > summary { list-style:none; cursor:pointer; display:flex; justify-content:space-between; align-items:center; gap:12px; padding:16px 18px; color:#092342; font-weight:800; background:#f9f7f1; }
+    .vt-admin-group > summary::-webkit-details-marker, .vt-admin-committee-group > summary::-webkit-details-marker { display:none; }
+    .vt-admin-group > summary::after, .vt-admin-committee-group > summary::after { content:'＋'; color:#B48F4C; font-weight:800; }
+    .vt-admin-group[open] > summary::after, .vt-admin-committee-group[open] > summary::after { content:'−'; }
+    .vt-admin-group > summary small, .vt-admin-committee-group > summary small { color:#707a84; font-weight:400; margin-inline-start:auto; }
+    .vt-admin-group-content, .vt-admin-committee-content { padding:8px 16px 14px; }
+    .vt-admin-committee-group { margin:12px 0; border-color:#e9e1d5; }
+    .vt-admin-committee-group > summary { background:#fff; }
+    .vt-admin-subgroup { margin:10px 0; border-style:dashed; }
+    .vt-admin-subgroup > summary { background:#fcfbf8; font-weight:700; }
+    @media (max-width:650px) { .vt-admin-group > summary, .vt-admin-committee-group > summary { align-items:flex-start; flex-wrap:wrap; padding:14px; } .vt-admin-group-content, .vt-admin-committee-content { padding:6px 9px 10px; } }
     @media (max-width:650px) {
       .admin-accordion > summary { padding:15px; }
       .admin-accordion-body { padding:4px 14px 16px; }
@@ -576,7 +588,8 @@
           new Date(a.created_at || 0) - new Date(b.created_at || 0)
         );
 
-        list.innerHTML = items.length ? items.map(item => `
+        // Render each training with its existing management controls.
+        const renderTraining = item => `
           <details class="item vt-admin-item admin-training-row" data-id="${NGDPortal.esc(item.id)}">
             <summary>
               <span class="admin-training-summary-main">
@@ -588,31 +601,59 @@
             <div class="admin-training-body">
               <p>${NGDPortal.esc(item.description || 'لا يوجد وصف.')}</p>
               ${item.instructions ? `<p class="muted small">التعليمات: ${NGDPortal.esc(item.instructions)}</p>` : ''}
-            <div class="portal-form vt-edit-panel" style="margin-top:12px">
-              <label>رابط حضور التدريب / المادة</label>
-              <input class="vt-edit-content-url" type="url" value="${NGDPortal.esc(item.content_url || '')}" placeholder="https://...">
-              <label>رابط فورم التسليم</label>
-              <input class="vt-edit-form-url" type="url" value="${NGDPortal.esc(item.submission_form_url || '')}" placeholder="https://forms.google.com/...">
-              <label>ترتيب التدريب (الأصغر يظهر أولًا)</label>
-              <input class="vt-edit-sort-order" type="number" min="1" step="1" value="${Number(item.sort_order) || 10}">
-              <label>موعد ظهور التدريب</label>
-              <input class="vt-edit-available" type="datetime-local" value="${isoToDateTimeLocal(item.available_at)}" required>
-              <label>موعد إغلاق التسليم (اختياري)</label>
-              <input class="vt-edit-due" type="datetime-local" value="${isoToDateTimeLocal(item.due_at)}">
-              <div class="muted small">
-                <p>الحالة: ${NGDPortal.esc(trainingState(item))}</p>
-                <p>آخر موعد: ${item.due_at ? new Date(item.due_at).toLocaleString('ar-EG') : 'غير محدد'}</p>
-              </div>
-              <div class="button-row">
-                <button type="button" class="save-vt-settings" data-id="${NGDPortal.esc(item.id)}">حفظ الروابط والترتيب والمواعيد</button>
-                ${item.published
-                  ? `<button type="button" class="secondary-btn toggle-vt" data-id="${NGDPortal.esc(item.id)}">إيقاف / إخفاء التدريب</button>`
-                  : `<button type="button" class="secondary-btn schedule-vt" data-id="${NGDPortal.esc(item.id)}">تفعيل بموعد محدد</button>
-                     <button type="button" class="publish-now-vt" data-id="${NGDPortal.esc(item.id)}">نشر الآن</button>`}
+              <div class="portal-form vt-edit-panel" style="margin-top:12px">
+                <label>رابط حضور التدريب / المادة</label>
+                <input class="vt-edit-content-url" type="url" value="${NGDPortal.esc(item.content_url || '')}" placeholder="https://...">
+                <label>رابط فورم التسليم</label>
+                <input class="vt-edit-form-url" type="url" value="${NGDPortal.esc(item.submission_form_url || '')}" placeholder="https://forms.google.com/...">
+                <label>ترتيب التدريب (الأصغر يظهر أولًا)</label>
+                <input class="vt-edit-sort-order" type="number" min="1" step="1" value="${Number(item.sort_order) || 10}">
+                <label>موعد ظهور التدريب</label>
+                <input class="vt-edit-available" type="datetime-local" value="${isoToDateTimeLocal(item.available_at)}" required>
+                <label>موعد إغلاق التسليم (اختياري)</label>
+                <input class="vt-edit-due" type="datetime-local" value="${isoToDateTimeLocal(item.due_at)}">
+                <div class="muted small">
+                  <p>الحالة: ${NGDPortal.esc(trainingState(item))}</p>
+                  <p>آخر موعد: ${item.due_at ? new Date(item.due_at).toLocaleString('ar-EG') : 'غير محدد'}</p>
+                </div>
+                <div class="button-row">
+                  <button type="button" class="save-vt-settings" data-id="${NGDPortal.esc(item.id)}">حفظ الروابط والترتيب والمواعيد</button>
+                  ${item.published
+                    ? `<button type="button" class="secondary-btn toggle-vt" data-id="${NGDPortal.esc(item.id)}">إيقاف / إخفاء التدريب</button>`
+                    : `<button type="button" class="secondary-btn schedule-vt" data-id="${NGDPortal.esc(item.id)}">تفعيل بموعد محدد</button>
+                       <button type="button" class="publish-now-vt" data-id="${NGDPortal.esc(item.id)}">نشر الآن</button>`}
+                </div>
               </div>
             </div>
-            </div>
-          </details>`).join('') : '<div class="empty">لم تتم إضافة تدريبات حتى الآن.</div>';
+          </details>`;
+
+        const renderGroup = (title, subtitle, groupItems, extraClass = '') => groupItems.length ? `
+          <details class="vt-admin-group ${extraClass}" open>
+            <summary><span>${title}</span><small>${subtitle} · ${groupItems.length} تدريب</small></summary>
+            <div class="vt-admin-group-content">${groupItems.map(renderTraining).join('')}</div>
+          </details>` : '';
+
+        const sharedItems = items.filter(item => item.training_type === 'shared');
+        const committeeItems = items.filter(item => item.training_type === 'committee');
+        const committeeGroups = Object.keys(committeeNames).map(key => {
+          const selected = committeeItems.filter(item => item.committee_key === key);
+          if (!selected.length) return '';
+          const technical = selected.filter(item => item.training_category !== 'specialized');
+          const specialized = selected.filter(item => item.training_category === 'specialized');
+          return `
+            <details class="vt-admin-committee-group" open>
+              <summary><span>${NGDPortal.esc(committeeNames[key])}</span><small>${selected.length} تدريب</small></summary>
+              <div class="vt-admin-committee-content">
+                ${renderGroup('التدريبات التقنية', 'تقني', technical, 'vt-admin-subgroup')}
+                ${renderGroup('التدريبات التخصصية', 'تكنيكال / تخصصي', specialized, 'vt-admin-subgroup')}
+              </div>
+            </details>`;
+        }).join('');
+
+        list.innerHTML = items.length ? `
+          ${renderGroup('التدريبات المشتركة والمهارات الأساسية', 'متاحة لكل المتطوعين', sharedItems, 'vt-admin-shared-group')}
+          ${committeeGroups || (committeeItems.length ? committeeItems.filter(item => !committeeNames[item.committee_key]).map(renderTraining).join('') : '')}
+        ` : '<div class="empty">لم تتم إضافة تدريبات حتى الآن.</div>';
 
         list.querySelectorAll('.save-vt-settings').forEach(button => {
           button.addEventListener('click', async () => {
