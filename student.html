@@ -677,7 +677,7 @@
 
     const committeeKeys = [...new Set(memberships.map(item => item.committee_key).filter(Boolean))];
     const nowIso = new Date().toISOString();
-    const fields = "id,title,description,instructions,training_type,committee_key,content_url,submission_form_url,sort_order,available_at,due_at,created_at";
+    const fields = "id,title,description,instructions,training_type,training_category,committee_key,content_url,submission_form_url,sort_order,available_at,due_at,created_at";
 
     const sharedRes = await db
       .from("volunteer_trainings")
@@ -719,42 +719,56 @@
 
     count.textContent = String(trainings.length);
     const now = new Date();
+    const committeeLabel = key => ({
+      hr: "Human Resources (HR)", graphics: "Graphics", media: "Media",
+      marketing: "Marketing", "content-writing": "Content Writing",
+      organizing: "Organizing", "monitoring-evaluation": "Monitoring & Evaluation",
+      "training-development": "Training & Development", pr: "PR",
+      training: "Training", "media-marketing": "Media & Marketing", "voice-over": "Voice Over"
+    }[key] || key || "لجنتك");
 
-    container.innerHTML = trainings.length ? trainings.map((training, index) => {
+    const renderTraining = (training, index) => {
       const deadline = training.due_at ? new Date(training.due_at) : null;
       const isClosed = Boolean(deadline && deadline <= now);
       const attendanceUrl = safeUrl(training.content_url);
       const formUrl = safeUrl(training.submission_form_url);
       const statusLabel = isClosed ? "انتهى التسليم" : formUrl ? "التسليم مفتوح" : "بانتظار رابط التسليم";
-      const committeeLabel = training.training_type === "shared"
-        ? "تدريب مشترك لكل المتطوعين"
-        : `تدريب لجنة: ${esc(training.committee_key === "hr" ? "Human Resources (HR)" : training.committee_key || "لجنتك")}`;
-
       return `
         <article class="item volunteer-training-item" data-training-id="${esc(training.id)}">
           <div class="item-top">
             <strong>${index + 1}. ${esc(training.title)}</strong>
             <span class="pill">${statusLabel}</span>
           </div>
-          <p class="muted small">${committeeLabel}</p>
           <p>${esc(training.description || "لا يوجد وصف مضاف لهذا التدريب.")}</p>
           ${training.instructions ? `<div class="item"><strong>التعليمات</strong><p>${esc(training.instructions)}</p></div>` : ""}
           <div class="button-row" style="display:flex;flex-wrap:wrap;gap:10px;margin:14px 0">
-            ${attendanceUrl
-              ? `<a class="btn secondary" href="${esc(attendanceUrl)}" target="_blank" rel="noopener noreferrer">▶ حضور التدريب</a>`
-              : `<button class="btn secondary" type="button" disabled>رابط الحضور غير مضاف</button>`}
-            ${formUrl && !isClosed
-              ? `<a class="btn" href="${esc(formUrl)}" target="_blank" rel="noopener noreferrer">📝 فورم التسليم</a>`
-              : isClosed
-                ? `<button class="btn secondary" type="button" disabled>انتهى موعد التسليم</button>`
-                : `<button class="btn secondary" type="button" disabled>فورم التسليم غير متاح حاليًا</button>`}
+            ${attendanceUrl ? `<a class="btn secondary" href="${esc(attendanceUrl)}" target="_blank" rel="noopener noreferrer">▶ حضور التدريب</a>` : `<button class="btn secondary" type="button" disabled>رابط الحضور غير مضاف</button>`}
+            ${formUrl && !isClosed ? `<a class="btn" href="${esc(formUrl)}" target="_blank" rel="noopener noreferrer">📝 فورم التسليم</a>` : isClosed ? `<button class="btn secondary" type="button" disabled>انتهى موعد التسليم</button>` : `<button class="btn secondary" type="button" disabled>فورم التسليم غير متاح حاليًا</button>`}
           </div>
           <div class="muted small">
             <p>موعد إتاحة التدريب: ${training.available_at ? new Date(training.available_at).toLocaleString("ar-EG") : "—"}</p>
             <p>موعد إغلاق التسليم: ${deadline ? deadline.toLocaleString("ar-EG") : "غير محدد"}</p>
           </div>
         </article>`;
-    }).join("") : `<div class="empty">لا توجد تدريبات مفعّلة ومتاحة لك حاليًا. ستظهر التدريبات هنا تلقائيًا عند حلول موعدها.</div>`;
+    };
+
+    const sharedTrainings = trainings.filter(t => t.training_type === "shared");
+    const committees = [...new Set(trainings.filter(t => t.training_type === "committee").map(t => t.committee_key))];
+    const skillHtml = sharedTrainings.length
+      ? sharedTrainings.map(renderTraining).join("")
+      : `<div class="empty">لا توجد تدريبات مهارية مشتركة متاحة حاليًا.</div>`;
+    const committeeHtml = committees.length ? committees.map(key => {
+      const items = trainings.filter(t => t.training_type === "committee" && t.committee_key === key);
+      const technical = items.filter(t => (t.training_category || "technical") === "technical");
+      const specialized = items.filter(t => t.training_category === "specialized");
+      const renderGroup = (title, rows) => `<section class="item"><h4>${title}</h4>${rows.length ? rows.map(renderTraining).join("") : `<div class="empty">لا توجد تدريبات في هذا القسم حاليًا.</div>`}</section>`;
+      return `<section class="item"><h3>${esc(committeeLabel(key))}</h3>${renderGroup("التدريبات التقنية", technical)}${renderGroup("التدريبات التكنيكال / التخصصية", specialized)}</section>`;
+    }).join("") : `<div class="empty">لا توجد تدريبات لجنتك متاحة حاليًا.</div>`;
+
+    container.innerHTML = `
+      <section class="item"><h3>التدريبات المشتركة والمهارات الأساسية</h3>${skillHtml}</section>
+      <section class="item"><h3>تدريبات اللجان</h3>${committeeHtml}</section>`;
+
   }
 
   await loadVolunteerTrainingProgram();
