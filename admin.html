@@ -153,6 +153,14 @@
           <option value="committee">تدريب خاص بلجنة</option>
         </select>
 
+        <div id="vt-category-wrap" class="hidden">
+          <label for="vt-category">تصنيف تدريب اللجنة *</label>
+          <select id="vt-category" name="training_category">
+            <option value="technical">تقني</option>
+            <option value="specialized">تكنيكال / تخصصي</option>
+          </select>
+        </div>
+
         <div id="vt-committee-wrap" class="hidden">
           <label for="vt-committee">اللجنة *</label>
           <select id="vt-committee" name="committee_key">
@@ -553,7 +561,7 @@
         const list = byId('vt-list');
         const { data, error } = await db
           .from('volunteer_trainings')
-          .select('id,title,description,instructions,training_type,committee_key,content_url,submission_form_url,sort_order,available_at,due_at,published,created_at')
+          .select('id,title,description,instructions,training_type,training_category,committee_key,content_url,submission_form_url,sort_order,available_at,due_at,published,created_at')
           .order('sort_order', { ascending: true })
           .order('created_at', { ascending: true });
 
@@ -573,7 +581,7 @@
             <summary>
               <span class="admin-training-summary-main">
                 <strong>${NGDPortal.esc(item.title)}</strong>
-                <small>${NGDPortal.esc(trainingTypeLabel(item.training_type))}${item.committee_key ? ' · ' + NGDPortal.esc(committeeNames[item.committee_key] || item.committee_key) : ''}</small>
+                <small>${NGDPortal.esc(trainingTypeLabel(item.training_type))}${item.committee_key ? ' · ' + NGDPortal.esc(committeeNames[item.committee_key] || item.committee_key) + ' · ' + (item.training_category === 'specialized' ? 'تكنيكال / تخصصي' : 'تقني') : ''}</small>
               </span>
               <span class="pill">${NGDPortal.esc(trainingState(item))}</span>
             </summary>
@@ -777,6 +785,7 @@
           description: String(values.description || '').trim() || null,
           instructions: String(values.instructions || '').trim() || null,
           training_type: type,
+          training_category: type === 'shared' ? 'skill' : (values.training_category || 'technical'),
           committee_key: type === 'committee' ? values.committee_key : null,
           content_url: String(values.content_url || '').trim() || null,
           submission_form_url: String(values.submission_form_url || '').trim() || null,
@@ -798,6 +807,7 @@
         byId('vt-type').value = 'shared';
         byId('vt-sort-order').value = '';
         byId('vt-committee-wrap').classList.add('hidden');
+        byId('vt-category-wrap').classList.add('hidden');
         NGDPortal.show(statusId, 'تم حفظ التدريب بنجاح.', 'success');
         await loadVolunteerTrainings();
       }
@@ -1014,6 +1024,7 @@
         byId('vt-type').addEventListener('change', () => {
           const isCommittee = byId('vt-type').value === 'committee';
           byId('vt-committee-wrap').classList.toggle('hidden', !isCommittee);
+          byId('vt-category-wrap').classList.toggle('hidden', !isCommittee);
           byId('vt-committee').required = isCommittee;
           if (!isCommittee) byId('vt-committee').value = '';
         });
