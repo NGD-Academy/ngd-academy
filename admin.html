@@ -11,6 +11,38 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="config/supabase-config.js"></script>
   <script src="assets/portal-common.js"></script>
+
+  <style>
+    /* Compact administration layout */
+    .admin-accordion { padding: 0 !important; overflow: hidden; margin-block: 14px; }
+    .admin-accordion > summary { list-style: none; cursor: pointer; display:flex; align-items:center; justify-content:space-between; gap:14px; padding:18px 22px; font-weight:800; color:#092342; }
+    .admin-accordion > summary::-webkit-details-marker { display:none; }
+    .admin-accordion > summary::after { content:'＋'; color:#B48F4C; font-size:1.25rem; font-weight:700; }
+    .admin-accordion[open] > summary::after { content:'−'; }
+    .admin-accordion > summary:hover { background:#f9f7f1; }
+    .admin-accordion-body { padding: 4px 22px 22px; border-top:1px solid #eee6d9; }
+    .admin-accordion-body > h2 { display:none; }
+    .admin-accordion-body .section-title { margin-top:8px; }
+    .admin-training-row { padding:0 !important; overflow:hidden; margin:10px 0; border:1px solid #e7ddcf; border-radius:12px; }
+    .admin-training-row > summary { list-style:none; cursor:pointer; display:flex; justify-content:space-between; align-items:center; gap:12px; padding:15px 17px; }
+    .admin-training-row > summary::-webkit-details-marker { display:none; }
+    .admin-training-row > summary::after { content:'إدارة التدريب  ＋'; color:#092342; font-size:.86rem; white-space:nowrap; }
+    .admin-training-row[open] > summary::after { content:'إغلاق  −'; }
+    .admin-training-row > summary:hover { background:#faf8f3; }
+    .admin-training-summary-main { display:flex; flex-direction:column; gap:5px; min-width:0; }
+    .admin-training-summary-main strong { color:#092342; }
+    .admin-training-summary-main small { color:#707a84; font-size:.82rem; }
+    .admin-training-body { padding:14px 17px 18px; border-top:1px solid #eee6d9; }
+    .admin-training-body .vt-edit-panel { margin-top:14px; }
+    .admin-section-hint { color:#707a84; font-size:.82rem; font-weight:400; }
+    @media (max-width:650px) {
+      .admin-accordion > summary { padding:15px; }
+      .admin-accordion-body { padding:4px 14px 16px; }
+      .admin-training-row > summary { align-items:flex-start; }
+      .admin-training-row > summary::after { font-size:.75rem; }
+    }
+  </style>
+
 </head>
 <body>
   <header class="portal-header">
@@ -537,14 +569,17 @@
         );
 
         list.innerHTML = items.length ? items.map(item => `
-          <article class="item vt-admin-item" data-id="${NGDPortal.esc(item.id)}">
-            <div class="item-top">
-              <strong>${NGDPortal.esc(item.title)}</strong>
+          <details class="item vt-admin-item admin-training-row" data-id="${NGDPortal.esc(item.id)}">
+            <summary>
+              <span class="admin-training-summary-main">
+                <strong>${NGDPortal.esc(item.title)}</strong>
+                <small>${NGDPortal.esc(trainingTypeLabel(item.training_type))}${item.committee_key ? ' · ' + NGDPortal.esc(committeeNames[item.committee_key] || item.committee_key) : ''}</small>
+              </span>
               <span class="pill">${NGDPortal.esc(trainingState(item))}</span>
-            </div>
-            <p class="muted small">${NGDPortal.esc(trainingTypeLabel(item.training_type))}${item.committee_key ? ' · ' + NGDPortal.esc(committeeNames[item.committee_key] || item.committee_key) : ''}</p>
-            <p>${NGDPortal.esc(item.description || 'لا يوجد وصف.')}</p>
-            ${item.instructions ? `<p class="muted small">التعليمات: ${NGDPortal.esc(item.instructions)}</p>` : ''}
+            </summary>
+            <div class="admin-training-body">
+              <p>${NGDPortal.esc(item.description || 'لا يوجد وصف.')}</p>
+              ${item.instructions ? `<p class="muted small">التعليمات: ${NGDPortal.esc(item.instructions)}</p>` : ''}
             <div class="portal-form vt-edit-panel" style="margin-top:12px">
               <label>رابط حضور التدريب / المادة</label>
               <input class="vt-edit-content-url" type="url" value="${NGDPortal.esc(item.content_url || '')}" placeholder="https://...">
@@ -568,7 +603,8 @@
                      <button type="button" class="publish-now-vt" data-id="${NGDPortal.esc(item.id)}">نشر الآن</button>`}
               </div>
             </div>
-          </article>`).join('') : '<div class="empty">لم تتم إضافة تدريبات حتى الآن.</div>';
+            </div>
+          </details>`).join('') : '<div class="empty">لم تتم إضافة تدريبات حتى الآن.</div>';
 
         list.querySelectorAll('.save-vt-settings').forEach(button => {
           button.addEventListener('click', async () => {
@@ -933,9 +969,38 @@
         });
       }
 
+      function compactAdminSections() {
+        const main = document.querySelector('main.wrap');
+        if (!main) return;
+        const cards = Array.from(main.querySelectorAll(':scope > section.card'));
+        cards.forEach(card => {
+          const heading = card.querySelector(':scope > h2') || card.querySelector(':scope > .section-title > h2');
+          if (!heading) return;
+          const title = heading.textContent.trim();
+          const details = document.createElement('details');
+          details.className = 'card admin-accordion';
+          // Keep the two volunteer-training work areas easy to reach on first load.
+          if (title === 'التدريبات الحالية') details.open = true;
+          const summary = document.createElement('summary');
+          const titleSpan = document.createElement('span');
+          titleSpan.textContent = title;
+          summary.appendChild(titleSpan);
+          details.appendChild(summary);
+          const body = document.createElement('div');
+          body.className = 'admin-accordion-body';
+          Array.from(card.childNodes).forEach(node => {
+            if (node === heading) return;
+            body.appendChild(node);
+          });
+          details.appendChild(body);
+          card.replaceWith(details);
+        });
+      }
+
       async function start() {
         const allowed = await ensureAdmin();
         if (!allowed) return;
+        compactAdminSections();
 
         byId('logout').addEventListener('click', () => NGDPortal.signOut());
         byId('course-form').addEventListener('submit', handleCourseSubmit);
